@@ -1,15 +1,30 @@
 {
   "name": "سام - دستیار صمیمی",
   "short_name": "سام",
-  "start_url": "/index.html",
+  "description": "دستیار هوشمند و دوست صمیمی برای پدربزرگ",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#fdfbfb",
   "theme_color": "#9d7bb0",
+  "dir": "rtl",
+  "lang": "fa-IR",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/685/685655.png", 
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%239d7bb0' width='512' height='512'/><text x='50%' y='50%' font-size='300' text-anchor='middle' dominant-baseline='middle' font-family='Arial'>👵</text></svg>",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["lifestyle", "productivity"],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%23fdfbfb' width='540' height='720'/><rect fill='%239d7bb0' width='540' height='100'/><text x='270' y='50' font-size='40' text-anchor='middle' dominant-baseline='middle' fill='white' font-family='Arial'>سام</text></svg>",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
     }
   ]
 }
