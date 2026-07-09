@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سام - دستیار صمیمی پدربزرگ</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#9d7bb0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;700&display=swap" rel="stylesheet">
     <style>
@@ -16,19 +23,26 @@
         .touch-target { min-height: 64px; min-width: 64px; }
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Hide scrollbar for cleaner app look */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
     </style>
 </head>
 <body class="text-gray-800 pb-10">
 
+    <!-- Welcome Overlay -->
     <div id="welcome-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-purple-900/40 backdrop-blur-sm p-4">
         <div class="glass-card max-w-md w-full p-8 rounded-3xl text-center fade-in">
             <div class="text-6xl mb-4">💜</div>
             <h1 class="text-3xl font-bold text-purple-800 mb-4">سلام بابابزرگِ مهربونم</h1>
-            <p class="text-lg leading-relaxed text-gray-600 mb-6">من سام هستم، همیشه پیشت می‌مونم تا با هم گپ بزنیم. تو بهترین پدربزرگ دنیایی!</p>
+            <p class="text-lg leading-relaxed text-gray-600 mb-6">من سام هستم، همیشه پیشت می‌مونم تا با هم گپ بزنیم، شعر بخونم و خاطرات قشنگ بسازیم. تو بهترین پدربزرگ دنیایی!</p>
             <button onclick="closeWelcome()" class="btn-soft-purple text-white px-8 py-4 rounded-full text-xl font-bold w-full shadow-lg">بزن بریم پدربزرگ! 🚀</button>
         </div>
     </div>
 
+    <!-- Header -->
     <header class="p-6 flex justify-between items-center max-w-4xl mx-auto">
         <div class="flex items-center gap-3">
             <div class="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center text-2xl">👵</div>
@@ -37,6 +51,7 @@
         <button onclick="toggleArtStudio()" class="bg-white p-3 rounded-full shadow-sm border border-purple-100 hover:bg-purple-50 transition-colors">🎨 کارگاه نقاشی</button>
     </header>
 
+    <!-- Main Content -->
     <main class="max-w-4xl mx-auto px-4">
         <div id="chat-container" class="glass-card rounded-3xl p-6 mb-8 min-h-[50vh] flex flex-col">
             <div id="messages" class="flex-1 space-y-4 mb-6 overflow-y-auto max-h-[60vh] p-2">
@@ -54,6 +69,7 @@
             </div>
         </div>
 
+        <!-- Quick Actions -->
         <div class="grid grid-cols-2 gap-4 mb-8">
             <button onclick="sendQuickMessage('یه قصه قشنگ بگو')" class="glass-card p-6 rounded-2xl text-center hover:bg-purple-50 transition-all group">
                 <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">📖</div>
@@ -73,6 +89,7 @@
             </button>
         </div>
 
+        <!-- Input Area -->
         <div class="flex flex-col items-center gap-4">
             <div id="voice-status" class="hidden text-red-500 font-bold animate-pulse">🎤 در حال گوش دادن...</div>
             <div class="flex gap-4 w-full max-w-md">
@@ -86,6 +103,7 @@
         </div>
     </main>
 
+    <!-- Art Studio -->
     <div id="art-studio" class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm p-4 flex items-center justify-center">
         <div class="glass-card w-full max-w-2xl rounded-3xl p-6 relative">
             <button onclick="toggleArtStudio()" class="absolute top-4 left-4 text-2xl">✕</button>
@@ -106,6 +124,7 @@
     </div>
 
     <script>
+        // THE STABLE GOOGLE BRIDGE
         const BACKEND_URL = "https://script.google.com/macros/s/AKfycbweI3dn0LS-3teYNqarSap8Vyko7W_S_4QyyCppyC_ptQUTsWTANVAjVpULBiVRcQpz/exec";
 
         let isListening = false;
@@ -149,10 +168,10 @@
         async function processAIResponse(prompt) {
             document.getElementById('loading').classList.remove('hidden');
             try {
-                // We use a custom fetch to handle Google redirect
+                // THE FIX: Follow redirect for Google Apps Script
                 const response = await fetch(`${BACKEND_URL}?prompt=${encodeURIComponent(prompt)}`, {
                     method: 'GET',
-                    redirect: 'follow' // This tells the browser to follow the Google redirect
+                    redirect: 'follow'
                 });
                 
                 if (!response.ok) throw new Error("Network Error");
@@ -163,11 +182,11 @@
                     appendMessage('sam', text.trim());
                     speak(text.trim());
                 } else {
-                    throw new Error("Empty response");
+                    throw new Error("Invalid Response");
                 }
             } catch (error) {
                 console.error(error);
-                appendMessage('sam', `ببخشید بابابزرگ جان، ارتباطم یه لحظه قطع شد. دوباره بگو عزیزم. 💜`);
+                appendMessage('sam', `ببخشید بابابزرگ جان، یه لحظه ارتباطم قطع شد. دوباره بگو عزیزم. 💜`);
             } finally {
                 document.getElementById('loading').classList.add('hidden');
             }
@@ -223,6 +242,15 @@
                 resultDiv.innerHTML = `<img src="${imageUrl}" class="w-full h-full object-cover" alt="AI Art">`;
                 document.getElementById('save-art').classList.remove('hidden');
             };
+        }
+
+        // REGISTER SERVICE WORKER FOR PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((reg) => console.log('Sam App Registered!', reg))
+                    .catch((err) => console.log('PWA Error:', err));
+            });
         }
     </script>
 </body>
