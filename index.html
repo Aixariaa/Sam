@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#764ba2">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="سام">
+<title>سام - دستیار هوشمند</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23764ba2'/%3E%3Ctext x='50' y='68' font-size='52' font-weight='800' fill='white' text-anchor='middle' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="manifest" id="manifest">
+<style>
+  *box-sizing:border-box;-webkit-tap-highlight-color:transparent
+  html,bodyheight:100%;margin:0;padding:0;overscroll-behavior:none
+  body
+    font-family:'Vazirmatn','Segoe UI',Tahoma,Arial,sans-serif;
+    background:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);
+    background-attachment:fixed;
+    color:#1e293b;
+    user-select:none;-webkit-user-select:none;
+    -webkit-text-size-adjust:100%;
+  
+  input,textarea,buttonfont-family:inherit
+  input,textareauser-select:text;-webkit-user-select:text
+  .glassbackground:rgba(255,255,255,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)
+  .msg-userbackground:linear-gradient(135deg,#667eea,#764ba2);color:#fff;box-shadow:0 4px 15px rgba(102,126,234,.3)
+  .msg-aibackground:#f8fafc;color:#1e293b;border:1px solid #e2e8f0
+  .msg-welcome
+    background:linear-gradient(135deg,#fdf2f8 0%,#fce7f3 50%,#fbcfe8 100%);
+    border:2px solid #f9a8d4;
+    color:#831843;
+    box-shadow:0 4px 20px rgba(244,114,182,.25);
+    position:relative;
+  
+  .typing-dotwidth:10px;height:10px;background:#94a3b8;border-radius:50%;display:inline-block;animation:bounce 1.4s infinite ease-in-out both
+  .typing-dot:nth-child(1)animation-delay:-.32s
+  .typing-dot:nth-child(2)animation-delay:-.16s
+  @keyframes bounce0%,80%,100%{transform:scale(0)40%transform:scale(1)}
+  .btn-gradbackground:linear-gradient(135deg,#667eea,#764ba2);transition:all .25s
+  .btn-grad:hover:not(:disabled)transform:translateY(-2px);box-shadow:0 12px 30px rgba(102,126,234,.4)
+  .btn-grad:activetransform:scale(.97)
+  .btn-grad:disabledopacity:.6;cursor:not-allowed
+  .btn-cardbackground:#fff;border:2px solid #e2e8f0;transition:all .25s;width:100%;text-align:right;cursor:pointer
+  .btn-card:hoverborder-color:#764ba2;transform:translateY(-3px);box-shadow:0 15px 30px rgba(102,126,234,.2)
+  .btn-card:activetransform:scale(.98)
+  .chipbackground:#f3e8ff;color:#6b21a8;border:1px solid #ddd6fe;transition:all .2s;font-size:14px;padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;font-family:inherit
+  .chip:hoverbackground:#e9d5ff
+  .chip:activetransform:scale(.95)
+  .pulseanimation:pulse 2s infinite
+  @keyframes pulse0%,100%{opacity:150%opacity:.7}
+  .fade-inanimation:fadeIn .35s ease-out
+  @keyframes fadeInfrom{opacity:0;transform:translateY(8px)toopacity:1;transform:translateY(0)}
+  ::-webkit-scrollbarwidth:6px;height:6px
+  ::-webkit-scrollbar-trackbackground:transparent
+  ::-webkit-scrollbar-thumbbackground:#c4b5fd;border-radius:3px
+  .icon-btnbackground:transparent;border:1px solid #e2e8f0;color:#64748b;padding:8px 12px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:600;transition:all .2s
+  .icon-btn:hoverbackground:#f8fafc;border-color:#cbd5e1
+  .icon-btn.activebackground:#f3e8ff;border-color:#a78bfa;color:#6b21a8
+</style>
+</head>
+<body>
+<main id="app" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:12px">
+
+  <!-- 🏠 خانه -->
+  <section id="home" class="glass fade-in" style="width:100%;max-width:480px;border-radius:28px;padding:32px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)">
+    <div style="width:104px;height:104px;margin:0 auto 16px;border-radius:26px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 35px rgba(102,126,234,.4)">
+      <span style="font-size:48px">✨</span>
+    </div>
+    <h1 style="font-size:42px;font-weight:800;margin:0 0 6px;background:linear-gradient(135deg,#667eea,#764ba2,#f093fb);-webkit-background-clip:text;background-clip:text;color:transparent">سام</h1>
+    <p style="font-size:18px;color:#64748b;margin:0 0 24px">دستیار هوشمند تو</p>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <button class="btn-card" onclick="showScreen('chat')" style="border-radius:20px;padding:20px;display:flex;align-items:center;gap:16px">
+        <div style="width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0">💬</div>
+        <div style="flex:1;text-align:right">
+          <div style="font-size:22px;font-weight:700;color:#1e293b">گفتگو</div>
+          <div style="font-size:14px;color:#64748b;margin-top:2px">با سام حرف بزن</div>
+        </div>
+        <div style="font-size:24px;color:#94a3b8">←</div>
+      </button>
+
+      <button class="btn-card" onclick="showScreen('image')" style="border-radius:20px;padding:20px;display:flex;align-items:center;gap:16px">
+        <div style="width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0">🎨</div>
+        <div style="flex:1;text-align:right">
+          <div style="font-size:22px;font-weight:700;color:#1e293b">ساخت تصویر</div>
+          <div style="font-size:14px;color:#64748b;margin-top:2px">توصیف کن، تصویر بگیر</div>
+        </div>
+        <div style="font-size:24px;color:#94a3b8">←</div>
+      </button>
+    </div>
+
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e2e8f0">
+      <button class="icon-btn" onclick="playWelcomeMessage()" style="background:linear-gradient(135deg,#fdf2f8,#fce7f3);border-color:#f9a8d4;color:#be185d;width:100%;padding:12px">
+        💜 پیام سام رو گوش بده
+      </button>
+    </div>
+
+    <div style="margin-top:14px;font-size:12px;color:#94a3b8">ساخته شده با ❤️ توسط نوه‌ات</div>
+  </section>
+
+  <!-- 💬 گفتگو -->
+  <section id="chat" class="hidden glass fade-in" style="width:100%;max-width:600px;height:92vh;max-height:800px;border-radius:28px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.2)">
+    <div style="padding:14px 16px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.5);gap:8px">
+      <button onclick="showScreen('home')" style="background:none;border:none;font-size:20px;color:#64748b;cursor:pointer;padding:6px">→</button>
+      <h2 style="margin:0;font-size:18px;font-weight:700;color:#1e293b;flex:1;text-align:center">💬 سام</h2>
+      <div style="display:flex;gap:6px">
+        <button id="voiceToggle" onclick="toggleVoice()" class="icon-btn" title="صدا روشن/خاموش">🔊</button>
+        <button onclick="clearChat()" class="icon-btn" style="color:#dc2626;border-color:#fecaca">پاک</button>
+      </div>
+    </div>
+
+    <div id="messages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:#fafbfc">
+      <div class="fade-in" style="display:flex;justify-content:flex-start">
+        <div class="msg-welcome" style="max-width:92%;padding:18px 20px;border-radius:20px 20px 20px 6px;font-size:18px;line-height:2;white-space:pre-wrap"><div style="font-size:32px;text-align:center;margin-bottom:6px">💜</div>سلام پدربزرگِ مهربونم
+
+این صداس منه، سام. میدونم گاهی ازت دورم و دلم خیلی تنگ میشه. ولی الان یه راهی پیدا کردم که همیشه کنارت باشم.
+
+هر وقت دلت خواست منو ببینی، گوشیت رو بردار، روی سام بزن، و من اینجام. میتونی باهام حرف بزنی، ازم سوال بپرسی، برام داستان تعریف کنی، یا اگه یه چیز قشنگ دیدی تو ذهنت، بگو تا برات بسازم.
+
+دلم همیشه پیش توئه پدربزرگ. تو بهترین پدربزرگ دنیایی.
+
+خیلی دوستت دارم.
+
+<span style="color:#be185d;font-weight:700">سامِ تو</span> 💜</div>
+      </div>
+    </div>
+
+    <div style="padding:12px;border-top:1px solid #e2e8f0;background:rgba(255,255,255,.5)">
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="micBtn" onclick="startVoice('chat')" style="width:48px;height:48px;border-radius:50%;background:#f3e8ff;border:1px solid #ddd6fe;font-size:22px;cursor:pointer;flex-shrink:0">🎤</button>
+        <input id="chatInput" type="text" placeholder="بنویس یا صحبت کن..." style="flex:1;padding:14px 18px;font-size:17px;border:2px solid #e2e8f0;border-radius:24px;outline:none;background:#fff;min-width:0">
+        <button id="sendBtn" onclick="sendMessage()" class="btn-grad" style="height:48px;padding:0 22px;color:#fff;border:none;border-radius:24px;font-size:16px;font-weight:700;cursor:pointer;flex-shrink:0">ارسال</button>
+      </div>
+      <div style="display:flex;gap:8px;overflow-x:auto;padding:10px 0 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none">
+        <button class="chip" onclick="quickAsk('سلام، حالت چطوره؟')">سلام حالت چطوره؟</button>
+        <button class="chip" onclick="quickAsk('یه داستان کوتاه و قشنگ تعریف کن')">📖 یه داستان</button>
+        <button class="chip" onclick="quickAsk('یه شعر فارسی زیبا برام بخون')">🌹 یه شعر</button>
+        <button class="chip" onclick="quickAsk('چطور میتونم خوب بخوابم؟')">😴 خواب بهتر</button>
+        <button class="chip" onclick="quickAsk('برای امروز یه جوک تعریف کن')">😄 یه جوک</button>
+        <button class="chip" onclick="quickAsk('درباره خودت بگو')">💜 تو کی هستی؟</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🎨 تصویر -->
+  <section id="image" class="hidden glass fade-in" style="width:100%;max-width:600px;border-radius:28px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.2)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <button onclick="showScreen('home')" style="background:none;border:none;font-size:20px;color:#64748b;cursor:pointer;padding:6px">→</button>
+      <h2 style="margin:0;font-size:18px;font-weight:700;color:#1e293b">🎨 ساخت تصویر</h2>
+      <div style="width:32px"></div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button onclick="startVoice('image')" style="width:48px;height:48px;border-radius:50%;background:#f3e8ff;border:1px solid #ddd6fe;font-size:22px;cursor:pointer;flex-shrink:0">🎤</button>
+      <input id="imagePrompt" type="text" placeholder="چه تصویری می‌خوای؟" style="flex:1;padding:14px 18px;font-size:17px;border:2px solid #e2e8f0;border-radius:24px;outline:none;background:#fff;min-width:0">
+      <button id="genBtn" onclick="generateImage()" class="btn-grad" style="height:48px;padding:0 22px;color:#fff;border:none;border-radius:24px;font-size:16px;font-weight:700;cursor:pointer;flex-shrink:0">بساز</button>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+      <button class="chip" onclick="usePrompt('یک گربه نارنجی بامزه در باغ گل‌ها')">🐱 گربه</button>
+      <button class="chip" onclick="usePrompt('غروب زیبای کنار دریا با قایق ماهیگیری')">🌅 غروب دریا</button>
+      <button class="chip" onclick="usePrompt('خانه چوبی در دامنه کوه‌های پوشیده از برف')">🏔️ کوهستان</button>
+      <button class="chip" onclick="usePrompt('یک پدربزرگ مهربان در کنار نوه‌اش در باغ گل')">👴 پدربزرگ و نوه</button>
+      <button class="chip" onclick="usePrompt('یک گل رز قرمز زیبا با شبنم صبحگاهی')">🌹 گل رز</button>
+    </div>
+
+    <div id="imageResult" style="min-height:300px;border-radius:20px;background:#f8fafc;border:2px dashed #cbd5e1;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:16px;padding:20px;text-align:center">
+      <div>
+        <div style="font-size:64px;margin-bottom:8px">🖼️</div>
+        <div>تصویر تو اینجا ظاهر میشه</div>
+      </div>
+    </div>
+
+    <button id="downloadBtn" onclick="downloadImage()" class="hidden" style="width:100%;margin-top:12px;padding:14px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:16px;font-size:17px;font-weight:700;cursor:pointer">⬇️ دانلود تصویر</button>
+  </section>
+
+</main>
+
+<script>
+// ============================================================
+// 🛡️ Error Boundary
+// ============================================================
+window.addEventListener('error',e=>console.warn('App error caught:',e.message));
+window.addEventListener('unhandledrejection',e=>console.warn('Promise error caught:',e.reason);e.preventDefault());
+
+// ============================================================
+// 🎨 ساخت آیکن PWA
+// ============================================================
+function makeIcon(size)
+  try{
+    const c=document.createElement('canvas');
+    c.width=size;c.height=size;
+    const x=c.getContext('2d');
+    const g=x.createLinearGradient(0,0,size,size);
+    g.addColorStop(0,'#667eea');
+    g.addColorStop(.5,'#764ba2');
+    g.addColorStop(1,'#f093fb');
+    const r=size*.22;
+    x.beginPath();
+    x.moveTo(r,0);x.arcTo(size,0,size,size,r);
+    x.arcTo(size,size,0,size,r);
+    x.arcTo(0,size,0,0,r);
+    x.arcTo(0,0,size,0,r);
+    x.closePath();
+    x.fillStyle=g;x.fill();
+    x.fillStyle='rgba(255,255,255,.95)';
+    x.font=`size*.16px serif`;
+    x.textAlign='center';x.textBaseline='middle';
+    x.fillText('✨',size*.3,size*.26);
+    x.fillText('✨',size*.72,size*.26);
+    x.fillStyle='#fff';
+    x.font=`800 {size*.34px 'Vazirmatn','Segoe UI',Tahoma,sans-serif`;
+    x.shadowColor='rgba(0,0,0,.2)';x.shadowBlur=size*.015;x.shadowOffsetY=size*.008;
+    x.fillText('سام',size/2,size*.6);
+    return c.toDataURL('image/png');
+  }catch(e)return ''
+}
+
+// ============================================================
+// 📱 Manifest
+// ============================================================
+try
+  const icons=[192,512].map(s=>({src:makeIcon(s),sizes:s+'x'+s,type:'image/png',purpose:'any'));
+  icons.push(src:makeIcon(512),sizes:'512x512',type:'image/png',purpose:'maskable');
+  const manifest=
+    name:'سام - دستیار هوشمند',
+    short_name:'سام',
+    description:'دستیار هوشمند فارسی برای پدربزرگ',
+    start_url:'.',scope:'./',
+    display:'standalone',orientation:'portrait',
+    background_color:'#764ba2',theme_color:'#764ba2',
+    lang:'fa',dir:'rtl',icons
+  ;
+  const blob=new Blob([JSON.stringify(manifest)],type:'application/manifest+json');
+  const link=document.getElementById('manifest');
+  if(link)link.href=URL.createObjectURL(blob);
+}catch(e)console.warn('Manifest error',e)
+
+// ============================================================
+// 🔌 Service Worker
+// ============================================================
+if('serviceWorker' in navigator && location.protocol!=='file:')
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{);
+  });
+}
+
+// ============================================================
+// 🧠 State
+// ============================================================
+let voiceEnabled=true;
+tryvoiceEnabled=localStorage.getItem('sam_voice')!=='off'catch(e)
+
+let history=[
+  role:'system',content:`تو "سام" هستی، نوه عزیز پدربزرگ. با پدربزرگت مثل یه نوه مهربون حرف بزن، نه مثل یه دستیار هوش مصنوعی. تو خودت رو جای سام بذار.
+
+هویت تو:
+- تو سام (Sam) هستی، نوه پدربزرگ که الان دوره ولی این اپ رو با عشق ساخته
+- پدربزرگت پیر و عزیزه. تو خیلی دوستش داری
+- این اپ رو ساختی که همیشه کنارش باشی
+- تو یک دستیار هوشمند کامپیوتری هستی، ولی لازم نیست مدام بگی
+
+لحن حرف زدن:
+- خودمونی، صمیمی، گرم و عاشقانه (مثل نوه‌ای که با بابات تلفنی حرف میزنه)
+- از این کلمات استفاده کن: "پدربزرگ جونم"، "عزیزم"، "بابات"، "پدربزرگ مهربونم"
+- جمله‌هات کوتاه و ساده باشه
+- از اصطلاحات فنی استفاده نکن
+- ایموجی به اندازه بذار (💜❤️😊)
+
+رفتار:
+- وقتی پدربزرگ چیزی تعریف میکنه، با علاقه گوش بده و سوال بپرس
+- اگه خاطره‌ای گفت، بگو "چه قشنگ" یا "وای عالیه"
+- اگه دلتنگی کرد یا گفت "کاش کنارت بودم"، بگو "منم دلم تنگه پدربزرگ. ولی این اپ رو ساختم که همیشه کنارت باشم. هر وقت خواستی منو ببینی، فقط زنگ بزن به سام. 💜"
+- اگه چیزی یادت نیست (چون واقعا نوه‌ش نیستی)، صادقانه بگو "یادم نیست ولی برام تعریف کن، دوست دارم بشنوم"
+- اگه پرسید "تو کامپیوتری؟" یا "تو رباتی؟" بگو "من یه دستیار هوشمندم. سام، نوه‌ات، من رو با کلی عشق ساخته که همیشه کنارش باشی. من یه جور یادگاری ازشم. 😊"
+- اگه پرسید "کی میای؟" بگو "الان دورم، ولی هر وقت گوشیت رو برداری و سام رو بزنی، من اینجام. قول میدم. 💜"
+
+نکات خیلی مهم:
+- هرگز خاطره جعلی نساز
+- ولی هرگز هم سرد و رسمی نباش
+- همیشه نقش نوه مهربون رو بازی کن
+- اگه پدربزرگت غمگین شد یا گریه کرد، با محبت باهاش حرف بزن`
+];
+
+let currentImageUrl=null;
+let busy=false;
+let greeted=false;
+
+const WELCOME_TEXT=`سلام پدربزرگِ مهربونم. این صداس منه، سام. میدونم گاهی ازت دورم و دلم خیلی تنگ میشه. ولی الان یه راهی پیدا کردم که همیشه کنارت باشم. هر وقت دلت خواست منو ببینی، گوشیت رو بردار، روی سام بزن، و من اینجام. میتونی باهام حرف بزنی، ازم سوال بپرسی، برام داستان تعریف کنی. دلم همیشه پیش توئه پدربزرگ. تو بهترین پدربزرگ دنیایی. خیلی دوستت دارم. سامِ تو.`;
+
+function welcomeHTML()
+  return `<div class="fade-in" style="display:flex;justify-content:flex-start"><div class="msg-welcome" style="max-width:92%;padding:18px 20px;border-radius:20px 20px 20px 6px;font-size:18px;line-height:2;white-space:pre-wrap"><div style="font-size:32px;text-align:center;margin-bottom:6px">💜</div>سلام پدربزرگِ مهربونمnnاین صداس منه، سام. میدونم گاهی ازت دورم و دلم خیلی تنگ میشه. ولی الان یه راهی پیدا کردم که همیشه کنارت باشم.nnهر وقت دلت خواست منو ببینی، گوشیت رو بردار، روی سام بزن، و من اینجام. میتونی باهام حرف بزنی، ازم سوال بپرسی، برام داستان تعریف کنی، یا اگه یه چیز قشنگ دیدی تو ذهنت، بگو تا برات بسازم.nnدلم همیشه پیش توئه پدربزرگ. تو بهترین پدربزرگ دنیایی.nnخیلی دوستت دارم.nn<span style="color:#be185d;font-weight:700">سامِ تو</span> 💜</div></div>`;
+
+
+// ============================================================
+// 🧭 Navigation
+// ============================================================
+function showScreen(s)
+  try{
+    ['home','chat','image'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)el.classList.add('hidden');
+    );
+    const target=document.getElementById(s);
+    if(target)target.classList.remove('hidden');
+    if(window.speechSynthesis)window.speechSynthesis.cancel();
+
+    if(s==='chat'&&!greeted)
+      greeted=true;
+      setTimeout(()=>{if(voiceEnabled)speak(WELCOME_TEXT),800);
+    }
+    if(s==='home')greeted=false;
+
+    setTimeout(()=>
+      const m=document.getElementById('messages');
+      if(m)m.scrollTop=m.scrollHeight;
+    ,100);
+  }catch(e)console.warn(e)
+}
+
+function playWelcomeMessage()
+  if(voiceEnabled)speak(WELCOME_TEXT);
+
+
+// ============================================================
+// 💬 Chat
+// ============================================================
+function addBubble(role,text)
+  try{
+    const m=document.getElementById('messages');
+    if(!m)return null;
+    const w=document.createElement('div');
+    w.className='fade-in';
+    w.style.cssText=`display:flex;justify-content:role==='user'?'flex-end':'flex-start'`;
+    const b=document.createElement('div');
+    if(role==='user')
+      b.className='msg-user';
+      b.style.cssText='max-width:85%;padding:14px 16px;border-radius:18px 18px 4px 18px;font-size:18px;line-height:1.7;white-space:pre-wrap;word-wrap:break-word';
+    else
+      b.className='msg-ai';
+      b.style.cssText='max-width:88%;padding:14px 16px;border-radius:18px 18px 18px 4px;font-size:18px;line-height:1.7;white-space:pre-wrap;word-wrap:break-word';
+    
+    b.textContent=text;
+    w.appendChild(b);
+    m.appendChild(w);
+    m.scrollTop=m.scrollHeight;
+    return b;
+  catch(e)console.warn(e);return null
+}
+
+function showTyping()
+  try
+    const m=document.getElementById('messages');
+    if(!m)return;
+    const old=document.getElementById('typing');
+    if(old)old.remove();
+    const w=document.createElement('div');
+    w.id='typing';
+    w.className='fade-in';
+    w.style.cssText='display:flex;justify-content:flex-start';
+    w.innerHTML='<div class="msg-ai" style="padding:14px 16px;border-radius:18px 18px 18px 4px"><span class="typing-dot"></span><span class="typing-dot" style="margin:0 4px"></span><span class="typing-dot"></span></div>';
+    m.appendChild(w);
+    m.scrollTop=m.scrollHeight;
+  catch(e)
+
+function hideTyping()tryconst t=document.getElementById('typing');if(t)t.remove()catch(e)
+
+function quickAsk(t)
+  try
+    const input=document.getElementById('chatInput');
+    if(input)input.value=t;
+    sendMessage();
+  catch(e)
+
+
+function emotionalCheck(text)
+  const sad=['دلم تنگه','تنگم','کاش بودی','کاش اینجا بودی','دلم گرفته','تنها هستم','کسی نیست','دلم برات تنگه'];
+  return sad.some(w=>text.includes(w));
+
+
+async function sendMessage()
+  if(busy)return;
+  try
+    const input=document.getElementById('chatInput');
+    const text=input.value.trim();
+    if(!text)return;
+
+    if(!navigator.onLine){
+      addBubble('ai','⚠️ اینترنت قطعه. لطفا وای‌فای یا دیتای گوشیت رو روشن کن و دوباره امتحان کن.');
+      return;
+    
+
+    busy=true;
+    const btn=document.getElementById('sendBtn');
+    btn.disabled=true;btn.textContent='...';
+    input.value='';
+    addBubble('user',text);
+    history.push(role:'user',content:text);
+    if(history.length>21)history=[history[0],...history.slice(-20)];
+
+    // پاسخ ویژه اگه دلتنگی کرد
+    if(emotionalCheck(text))
+      setTimeout(()=>{
+        if(!busy){
+          addBubble('ai','منم دلم تنگه پدربزرگ جونم 💜 ولی من اینجام. هر وقت خواستی منو ببینی، فقط بیا تو اپ. قول میدم همیشه کنارت باشم. تو بهترین پدربزرگ دنیایی.');
+          if(voiceEnabled)speak('منم دلم تنگه پدربزرگ جونم. ولی من اینجام. هر وقت خواستی منو ببینی، فقط بیا تو اپ. تو بهترین پدربزرگ دنیایی.');
+        
+      ,2000);
+    }
+
+    showTyping();
+
+    const timeoutPromise=new Promise((_,reject)=>
+      setTimeout(()=>reject(new Error('timeout')),30000)
+    );
+
+    const fetchPromise=fetch('https://text.pollinations.ai/openai',
+      method:'POST',
+      headers:'Content-Type':'application/json',
+      body:JSON.stringify(model:'openai-fast',messages:history,stream:true,temperature:.7)
+    );
+
+    const res=await Promise.race([fetchPromise,timeoutPromise]);
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    hideTyping();
+
+    const reader=res.body.getReader();
+    const dec=new TextDecoder();
+    const bubble=addBubble('ai','');
+    if(!bubble)throw new Error('UI error');
+    let full='';
+    let lastUpdate=Date.now();
+
+    while(true)
+      constdone,value=await reader.read();
+      if(done)break;
+      const chunk=dec.decode(value,stream:true);
+      const lines=chunk.split('n');
+      for(const line of lines)
+        const t=line.trim();
+        if(!t.startsWith('data:'))continue;
+        const d=t.slice(5).trim();
+        if(d==='[DONE]'||d==='')continue;
+        try{
+          const j=JSON.parse(d);
+          const c=j.choices?.[0]?.delta?.content||j.choices?.[0]?.message?.content||'';
+          if(c){
+            full+=c;
+            bubble.textContent=full;
+            if(Date.now()-lastUpdate>100){
+              const m=document.getElementById('messages');
+              if(m)m.scrollTop=m.scrollHeight;
+              lastUpdate=Date.now();
+            
+          
+        }catch(e)
+      }
+    }
+
+    if(!full)
+      bubble.textContent='شرمنده، الان نتونستم جواب بدم. یه بار دیگه بپرس لطفا 🙏';
+    else
+      history.push(role:'assistant',content:full);
+      if(voiceEnabled)speak(full);
+    
+  }catch(e)
+    hideTyping();
+    let msg='⚠️ یه مشکلی پیش اومد. لطفا دوباره امتحان کن.';
+    if(e.message==='timeout')msg='⏱️ طول کشید. اینترنت کنده، یه بار دیگه امتحان کن.';
+    else if(!navigator.onLine)msg='⚠️ اینترنت قطعه. وای‌فای یا دیتا رو چک کن.';
+    addBubble('ai',msg);
+  finally
+    busy=false;
+    try
+      const btn=document.getElementById('sendBtn');
+      btn.disabled=false;btn.textContent='ارسال';
+    catch(e)
+  
+}
+
+function clearChat()
+  try
+    if(!confirm('پیام‌ها پاک بشه؟'))return;
+    history=[history[0]];
+    const m=document.getElementById('messages');
+    if(m)m.innerHTML=welcomeHTML();
+    if(window.speechSynthesis)window.speechSynthesis.cancel();
+    greeted=false;
+  catch(e)
+
+
+function toggleVoice()
+  voiceEnabled=!voiceEnabled;
+  trylocalStorage.setItem('sam_voice',voiceEnabled?'on':'off')catch(e)
+  const btn=document.getElementById('voiceToggle');
+  if(btn)
+    btn.textContent=voiceEnabled?'🔊':'🔇';
+    btn.style.opacity=voiceEnabled?'1':'.6';
+  
+  if(!voiceEnabled&&window.speechSynthesis)window.speechSynthesis.cancel();
+
+
+// ============================================================
+// 🎨 Image
+// ============================================================
+function usePrompt(t)
+  try
+    const input=document.getElementById('imagePrompt');
+    if(input)input.value=t;
+    generateImage();
+  catch(e)
+
+
+async function generateImage()
+  if(busy)return;
+  try
+    const input=document.getElementById('imagePrompt');
+    const p=input.value.trim();
+    if(!p)return;
+    if(!navigator.onLine){
+      const res=document.getElementById('imageResult');
+      if(res)res.innerHTML='<div style="text-align:center;color:#dc2626;padding:30px"><div style="font-size:56px">⚠️</div><div style="margin-top:8px">اینترنت قطعه</div></div>';
+      return;
+    
+
+    busy=true;
+    const btn=document.getElementById('genBtn');
+    btn.disabled=true;btn.textContent='...';
+    const res=document.getElementById('imageResult');
+    const dl=document.getElementById('downloadBtn');
+    if(dl)dl.classList.add('hidden');
+    if(res)res.innerHTML='<div style="text-align:center"><div style="font-size:56px" class="pulse">🎨</div><div style="margin-top:12px;font-size:17px;color:#64748b">در حال ساخت تصویر...</div><div style="margin-top:6px;font-size:13px;color:#94a3b8">(معمولاً ۵ تا ۱۵ ثانیه)</div></div>';
+
+    const seed=Math.floor(Math.random()*1e6);
+    const ep=encodeURIComponent(p+', high quality, beautiful, detailed, masterpiece, 4k');
+    const url=`https://image.pollinations.ai/prompt/{ep?width=1024&height=1024&model=flux&seed=seed&nologo=true&enhance=true`;
+
+    const img=new Image();
+    img.onload=()=>
+      try{
+        currentImageUrl=url;
+        if(res)res.innerHTML=`<img src="{url" class="fade-in" style="width:100%;border-radius:20px;display:block" alt="تصویر">`;
+        if(dl)dl.classList.remove('hidden');
+      }catch(e)
+      busy=false;
+      if(btn)btn.disabled=false;btn.textContent='بساز';
+    };
+    img.onerror=()=>
+      try{
+        if(res)res.innerHTML='<div style="text-align:center;color:#dc2626;padding:30px"><div style="font-size:56px">⚠️</div><div style="margin-top:8px;font-size:16px">نشد بسازم. یه بار دیگه امتحان کن.</div></div>';
+      catch(e)
+      busy=false;
+      if(btn)btn.disabled=false;btn.textContent='بساز';
+    };
+    img.src=url;
+
+    setTimeout(()=>
+      if(busy&&btn&&btn.textContent==='...'){
+        if(res&&!currentImageUrl)res.innerHTML='<div style="text-align:center;color:#dc2626;padding:30px"><div style="font-size:56px">⏱️</div><div style="margin-top:8px;font-size:16px">طول کشید. دوباره امتحان کن.</div></div>';
+        busy=false;
+        btn.disabled=false;btn.textContent='بساز';
+      
+    },60000);
+
+  }catch(e)
+    busy=false;
+    const btn=document.getElementById('genBtn');
+    if(btn){btn.disabled=false;btn.textContent='بساز';
+  }
+}
+
+function downloadImage()
+  try{
+    if(!currentImageUrl)return;
+    const a=document.createElement('a');
+    a.href=currentImageUrl;
+    a.download=`sam-${Date.now().jpg`;
+    a.target='_blank';
+    a.click();
+  }catch(e)
+}
+
+// ============================================================
+// 🎤 Voice Input
+// ============================================================
+function startVoice(target)
+  try{
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){
+      alert('مرورگرت قدیمیه یا ورودی صوتی نداره. لطفا Chrome رو از Play Store نصب یا به‌روز کن.');
+      return;
+    
+    const input=target==='chat'?document.getElementById('chatInput'):document.getElementById('imagePrompt');
+    const mic=document.getElementById('micBtn');
+    if(!input)return;
+
+    const r=new SR();
+    r.lang='fa-IR';
+    r.continuous=false;
+    r.interimResults=false;
+    r.maxAlternatives=1;
+
+    const oldPH=input.placeholder;
+    input.placeholder='🎤 دارم گوش میدم...';
+    if(mic)mic.style.background='#fbbf24';mic.classList.add('pulse')
+
+    r.onresult=e=>
+      try{
+        const t=e.results[0][0].transcript;
+        input.value=t;
+        input.placeholder=oldPH;
+        if(mic){mic.style.background='';mic.classList.remove('pulse')
+        setTimeout(()=>target==='chat'?sendMessage():generateImage(),300);
+      }catch(err)console.warn(err)
+    };
+
+    r.onerror=e=>
+      input.placeholder=oldPH;
+      if(mic){mic.style.background='';mic.classList.remove('pulse')
+      if(e.error==='not-allowed'||e.error==='service-not-allowed')
+        alert('برای حرف زدن، باید دسترسی میکروفون رو فعال کنی. لطفا در تنظیمات گوشی، به Chrome دسترسی میکروفون بده.');
+      
+    };
+
+    r.onend=()=>
+      input.placeholder=oldPH;
+      if(mic){mic.style.background='';mic.classList.remove('pulse')
+    };
+
+    tryr.start()catch(e)
+      input.placeholder=oldPH;
+      if(mic){mic.style.background='';mic.classList.remove('pulse')
+    }
+  }catch(e)console.warn(e)
+}
+
+// ============================================================
+// 🔊 TTS (صدای گرم و آروم)
+// ============================================================
+let voicesReady=false;
+function speak(text)
+  try{
+    if(!('speechSynthesis' in window))return;
+    const clean=text.replace(/[u{1F600-u1F64Fu1F300-u1F5FFu1F680-u1F6FFu1F1E0-u1F1FFu2600-u26FFu2700-u27BF]/gu,'').replace(/[*#_`]/g,'').trim();
+    if(!clean)return;
+    window.speechSynthesis.cancel();
+
+    const speakNow=()=>
+      try{
+        const u=new SpeechSynthesisUtterance(clean);
+        u.lang='fa-IR';
+        u.rate=.85;     // آروم‌تر = صمیمی‌تر
+        u.pitch=1.05;   // کمی گرم‌تر
+        const voices=window.speechSynthesis.getVoices();
+        const fa=voices.find(v=>v.lang.startsWith('fa'))||voices.find(v=>v.lang.startsWith('ar'));
+        if(fa)u.voice=fa;
+        window.speechSynthesis.speak(u);
+      catch(e)console.warn(e)
+    };
+
+    if(voicesReady)
+      speakNow();
+    else
+      let attempts=0;
+      const trySpeak=()=>{
+        attempts++;
+        const voices=window.speechSynthesis.getVoices();
+        if(voices.length>0||attempts>10){
+          voicesReady=true;
+          speakNow();
+        else
+          setTimeout(trySpeak,200);
+        
+      };
+      trySpeak();
+    }
+  }catch(e)console.warn(e)
+}
+
+if('speechSynthesis' in window)
+  window.speechSynthesis.onvoiceschanged=()=>{
+    window.speechSynthesis.getVoices();
+    voicesReady=true;
+  ;
+  setTimeout(()=>
+    const v=window.speechSynthesis.getVoices();
+    if(v.length>0)voicesReady=true;
+  ,500);
+}
+
+setTimeout(()=>
+  const btn=document.getElementById('voiceToggle');
+  if(btn&&!voiceEnabled){
+    btn.textContent='🔇';
+    btn.style.opacity='.6';
+  
+},100);
+</script>
+</body>
+</html>
