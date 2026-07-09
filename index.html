@@ -99,6 +99,9 @@
             <div id="voice-warning" class="hidden text-amber-600 font-semibold text-sm bg-amber-50 px-4 py-2 rounded-lg">
                 ⚠️ مرورگر شما از صوت پشتیبانی نمی‌کند. لطفا متن بنویسید.
             </div>
+            <div id="connection-warning" class="hidden text-red-600 font-semibold text-sm bg-red-50 px-4 py-2 rounded-lg">
+                ❌ ارتباط قطع است. لطفا اینترنت را بررسی کنید.
+            </div>
             <div class="flex gap-4 w-full max-w-md">
                 <button id="mic-btn" onclick="toggleListening()" class="touch-target w-20 h-20 bg-purple-600 text-white rounded-full shadow-xl flex items-center justify-center text-3xl hover:bg-purple-700 transition-colors" title="فشار دهید و صحبت کنید">🎤</button>
                 <div class="flex-1 flex gap-2">
@@ -134,9 +137,25 @@
         // ==================== CONFIG ====================
         const BACKEND_URL = "https://script.google.com/macros/s/AKfycbweI3dn0LS-3teYNqarSap8Vyko7W_S_4QyyCppyC_ptQUTsWTANVAjVpULBiVRcQpz/exec";
         const MAX_RETRIES = 3;
-        const DEBOUNCE_DELAY = 500; // ms
+        const DEBOUNCE_DELAY = 800; // ms - increased for stability
+        const REQUEST_TIMEOUT = 15000; // 15 seconds
         let lastRequestTime = 0;
         let requestInProgress = false;
+        let isOnline = navigator.onLine;
+
+        // ==================== CONNECTION MONITORING ====================
+        window.addEventListener('online', () => {
+            isOnline = true;
+            console.log('✓ Back online');
+            document.getElementById('connection-warning').classList.add('hidden');
+        });
+
+        window.addEventListener('offline', () => {
+            isOnline = false;
+            console.log('✗ Offline');
+            document.getElementById('connection-warning').classList.remove('hidden');
+            appendMessage('sam', 'بابابزرگ جان، اینترنت قطع شده. لطفا اتصال را بررسی کن. 💜');
+        });
 
         // ==================== SPEECH API INIT ====================
         let isListening = false;
@@ -155,6 +174,7 @@
             recognition.lang = 'fa-IR';
             recognition.interimResults = false;
             recognition.maxAlternatives = 1;
+            recognition.continuous = false;
 
             recognition.onstart = () => {
                 isListening = true;
@@ -174,7 +194,13 @@
 
             recognition.onerror = (event) => {
                 console.error('Speech recognition error:', event.error);
-                appendMessage('sam', `ببخشید بابابزرگ، گوش دادنم اشتباه شد. دوباره سعی کن عزیزم. 💜`);
+                let errMsg = 'ببخشید بابابزرگ، گوش دادنم اشتباه شد. دوباره سعی کن عزیزم. 💜';
+                if (event.error === 'network') {
+                    errMsg = 'خطای شبکه. اینترنت خود را بررسی کنید. 💜';
+                } else if (event.error === 'no-speech') {
+                    errMsg = 'صدای شما شنیده نشد. دوباره سعی کنید. 💜';
+                }
+                appendMessage('sam', errMsg);
                 stopListeningUI();
             };
 
@@ -243,8 +269,8 @@
             // Register service worker
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('./sw.js')
-                    .then((reg) => console.log('✓ Sam App Service Worker Registered', reg))
-                    .catch((err) => console.error('✗ Service Worker Registration Failed:', err));
+                    .then((reg) => console.log('✓ Service Worker Registered'))
+                    .catch((err) => console.error('✗ Service Worker Failed:', err));
             }
         });
 
@@ -261,7 +287,7 @@
                 ? 'chat-bubble-error'
                 : 'chat-bubble-grandpa';
             
-            bubble.className = `p-4 max-w-[80%] ${bubbleClass} text-lg rounded-2xl`;
+            bubble.className = `p-4 max-w-[80%] ${bubbleClass} text-lg rounded-2xl break-words`;
             bubble.textContent = text;
             
             wrapper.appendChild(bubble);
@@ -271,19 +297,36 @@
 
         // ==================== DEBOUNCE & RATE LIMITING ====================
         function canProcessRequest() {
-            if (requestInProgress) return false;
+            if (!isOnline) {
+                console.warn('Offline - cannot process request');
+                return false;
+            }
+            if (requestInProgress) {
+                console.warn('Request already in progress');
+                return false;
+            }
             const now = Date.now();
-            if (now - lastRequestTime < DEBOUNCE_DELAY) return false;
+            if (now - lastRequestTime < DEBOUNCE_DELAY) {
+                console.warn('Request throttled');
+                return false;
+            }
             lastRequestTime = now;
             return true;
         }
 
-        // ==================== AI RESPONSE WITH RETRY ====================
+        // ==================== ROBUST FETCH WITH TIMEOUT ====================
+        function fetchWithTimeout(url, options = {}, timeout = REQUEST_TIMEOUT) {
+            return Promise.race([
+                fetch(url, options),
+                new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Request timeout')), timeout)
+                )
+            ]);
+        }
+
+        // ==================== AI RESPONSE WITH ADVANCED ERROR HANDLING ====================
         async function processAIResponse(prompt, retryCount = 0) {
-            if (!canProcessRequest()) {
-                console.warn('Request throttled');
-                return;
-            }
+            if (!canProcessRequest()) return;
 
             requestInProgress = true;
             document.getElementById('loading').classList.remove('hidden');
@@ -291,55 +334,96 @@
             document.getElementById('mic-btn').disabled = true;
 
             try {
-                const response = await fetch(`${BACKEND_URL}?prompt=${encodeURIComponent(prompt)}`, {
+                // Validate backend URL
+                if (!BACKEND_URL || !BACKEND_URL.includes('script.google.com')) {
+                    throw new Error('Invalid backend configuration');
+                }
+
+                const encodedPrompt = encodeURIComponent(prompt);
+                const requestUrl = `${BACKEND_URL}?prompt=${encodedPrompt}`;
+
+                console.log(`📤 Sending request (attempt ${retryCount + 1}/${MAX_RETRIES})...`);
+
+                const response = await fetchWithTimeout(requestUrl, {
                     method: 'GET',
                     redirect: 'follow',
-                    timeout: 10000
-                });
+                    headers: {
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
+                    }
+                }, REQUEST_TIMEOUT);
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    const statusText = `HTTP ${response.status}`;
+                    if (response.status === 401 || response.status === 403) {
+                        throw new Error('Invalid API Key or Access Denied');
+                    } else if (response.status >= 500) {
+                        throw new Error('Server Error - ' + statusText);
+                    } else if (response.status === 404) {
+                        throw new Error('Backend not found');
+                    }
+                    throw new Error(statusText);
                 }
                 
                 const text = await response.text();
+                console.log('📥 Response received:', text.substring(0, 50) + '...');
                 
                 if (!text || text.trim().length === 0) {
-                    throw new Error('Empty response from backend');
+                    throw new Error('Empty response');
                 }
 
-                if (text.includes('خطا') || text.includes('error')) {
-                    throw new Error('Backend returned error message');
+                if (text.includes('خطا') || text.includes('error') || text.includes('Error')) {
+                    console.warn('Backend error response:', text);
+                    throw new Error('Backend error: ' + text);
                 }
 
                 const trimmedText = text.trim();
                 appendMessage('sam', trimmedText);
                 speak(trimmedText);
+                console.log('✓ Success');
 
             } catch (error) {
-                console.error('AI Response Error:', error);
+                console.error('❌ AI Response Error:', error.message);
+
+                // Specific error messages
+                let userMessage = '';
+                if (error.message.includes('timeout')) {
+                    userMessage = 'بابابزرگ جان، جواب طولانی شد. لطفا دوباره سعی کن. 💜';
+                } else if (error.message.includes('Invalid API Key')) {
+                    userMessage = 'خطای احراز هویت. سیستم سام مشکل دارد. 💜';
+                } else if (error.message.includes('Network')) {
+                    userMessage = 'مشکل شبکه. اینترنت خود را بررسی کن. 💜';
+                } else if (error.message.includes('Server Error')) {
+                    userMessage = 'سرور خراب است. بعدا دوباره سعی کن. 💜';
+                } else {
+                    userMessage = `خطا: ${error.message}. دوباره سعی کن. 💜`;
+                }
 
                 // Retry logic
                 if (retryCount < MAX_RETRIES) {
-                    console.log(`Retrying... (${retryCount + 1}/${MAX_RETRIES})`);
-                    await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
+                    console.log(`⏳ Retrying in 2 seconds... (${retryCount + 1}/${MAX_RETRIES})`);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
                     requestInProgress = false;
                     return processAIResponse(prompt, retryCount + 1);
                 }
 
-                // Final fallback message
-                const fallbackMsg = `ببخشید بابابزرگ جان، خطایی رخ داد و نتونستم جواب بدم. دوباره سعی کن لطفاً. اگه مشکل ادامه داشت، شاید ارتباط اینترنتت مشکل داره. 💜`;
-                appendMessage('error', fallbackMsg);
-                speak(fallbackMsg);
+                // Final fallback after all retries exhausted
+                appendMessage('error', userMessage);
+                speak(userMessage);
             } finally {
                 requestInProgress = false;
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('send-btn').disabled = false;
-                document.getElementById('mic-btn').disabled = !recognition;
+                document.getElementById('mic-btn').disabled = !recognition || !isOnline;
             }
         }
 
         // ==================== VOICE & TEXT INPUT ====================
         function toggleListening() {
+            if (!isOnline) {
+                alert('اینترنت قطع است.');
+                return;
+            }
             if (!recognition) {
                 alert("مرورگر شما پشتیبانی نمی‌کند.");
                 return;
@@ -369,6 +453,10 @@
         }
 
         function handleTextInput() {
+            if (!isOnline) {
+                alert('اینترنت قطع است.');
+                return;
+            }
             const input = document.getElementById('text-input');
             const text = input.value.trim();
             
@@ -381,6 +469,10 @@
         }
 
         function sendQuickMessage(text) {
+            if (!isOnline) {
+                alert('اینترنت قطع است.');
+                return;
+            }
             if (!canProcessRequest()) return;
             appendMessage('grandpa', text);
             processAIResponse(text);
@@ -396,6 +488,10 @@
         }
 
         async function generateImage() {
+            if (!isOnline) {
+                alert('اینترنت قطع است.');
+                return;
+            }
             const prompt = document.getElementById('art-input').value.trim();
             if (!prompt) {
                 alert('لطفا یک توضیح برای نقاشی بنویس!');
@@ -413,15 +509,21 @@
                 const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&nologo=true`;
                 
                 const img = new Image();
+                const loadTimeout = setTimeout(() => {
+                    resultDiv.innerHTML = '<div class="flex flex-col items-center justify-center h-full"><div class="text-4xl mb-2">⏱️</div><p class="text-amber-600 font-bold">زمان بارگذاری طولانی شد</p></div>';
+                    generateBtn.disabled = false;
+                }, 8000);
                 
                 img.onload = () => {
+                    clearTimeout(loadTimeout);
                     resultDiv.innerHTML = `<img src="${imageUrl}" class="w-full h-full object-cover" alt="AI Art: ${prompt}">`;
                     document.getElementById('save-art').classList.remove('hidden');
                     generateBtn.disabled = false;
                 };
 
                 img.onerror = () => {
-                    resultDiv.innerHTML = '<div class="flex flex-col items-center justify-center h-full"><div class="text-4xl mb-2">❌</div><p class="text-red-600 font-bold">نتوانستم نقاشی رو بکشم</p><p class="text-sm text-gray-500 mt-2">لطفا دوباره سعی کن یا دیگری تصویر انتخاب کن</p></div>';
+                    clearTimeout(loadTimeout);
+                    resultDiv.innerHTML = '<div class="flex flex-col items-center justify-center h-full"><div class="text-4xl mb-2">❌</div><p class="text-red-600 font-bold">نتوانستم نقاشی رو بکشم</p><p class="text-sm text-gray-500 mt-2">لطفا دوباره سعی کن</p></div>';
                     document.getElementById('save-art').classList.add('hidden');
                     generateBtn.disabled = false;
                 };
