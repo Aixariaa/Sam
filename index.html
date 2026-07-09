@@ -1,823 +1,229 @@
-```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#8b5cf6">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="سام">
-  <title>سام - دستیار صمیمی تو</title>
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Vazirmatn Persian Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-  
-  <style>
-    body {
-      font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
-      overscroll-behavior: none;
-    }
-    
-    /* Elegant Custom Scrollbars */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(139, 92, 246, 0.2);
-      border-radius: 99px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(139, 92, 246, 0.4);
-    }
-
-    /* Keyframe Animations */
-    @keyframes heartbeat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.12); }
-    }
-    .animate-heart {
-      animation: heartbeat 2s infinite ease-in-out;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    .animate-float {
-      animation: float 4s infinite ease-in-out;
-    }
-
-    @keyframes pulse-ring {
-      0% { transform: scale(0.95); opacity: 0.5; }
-      50% { transform: scale(1.1); opacity: 0.3; }
-      100% { transform: scale(0.95); opacity: 0.5; }
-    }
-    .pulse-record {
-      animation: pulse-ring 1.5s infinite ease-in-out;
-    }
-
-    /* Message Bubble Borders */
-    .bubble-user {
-      border-radius: 20px 20px 4px 20px;
-    }
-    .bubble-ai {
-      border-radius: 20px 20px 20px 4px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سام - دستیار صمیمی پدربزرگ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Vazirmatn', sans-serif; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); min-height: 100vh; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07); }
+        .btn-soft-purple { background-color: #9d7bb0; transition: all 0.3s ease; }
+        .btn-soft-purple:hover { background-color: #8a6699; transform: translateY(-2px); }
+        .chat-bubble-sam { background: #f3e8ff; border-radius: 20px 20px 0 20px; }
+        .chat-bubble-grandpa { background: #e0f2fe; border-radius: 20px 20px 20px 0; }
+        .touch-target { min-height: 64px; min-width: 64px; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex items-center justify-center p-0 md:p-4">
+<body class="text-gray-800 pb-10">
 
-  <!-- Main Standalone Frame (Mobile & Desktop Friendly) -->
-  <div class="w-full max-w-2xl h-[100vh] md:h-[85vh] md:rounded-3xl bg-white md:shadow-2xl md:border md:border-purple-100 flex flex-col overflow-hidden relative">
-    
-    <!-- ====== START: TOP NAVIGATION HEADER ====== -->
-    <header class="bg-white/85 backdrop-blur-md border-b border-purple-100/80 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shrink-0">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-purple-200">
-          س
+    <div id="welcome-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-purple-900/40 backdrop-blur-sm p-4">
+        <div class="glass-card max-w-md w-full p-8 rounded-3xl text-center fade-in">
+            <div class="text-6xl mb-4">💜</div>
+            <h1 class="text-3xl font-bold text-purple-800 mb-4">سلام بابابزرگِ مهربونم</h1>
+            <p class="text-lg leading-relaxed text-gray-600 mb-6">من سام هستم، همیشه پیشت می‌مونم تا با هم گپ بزنیم. تو بهترین پدربزرگ دنیایی!</p>
+            <button onclick="closeWelcome()" class="btn-soft-purple text-white px-8 py-4 rounded-full text-xl font-bold w-full shadow-lg">بزن بریم پدربزرگ! 🚀</button>
         </div>
-        <div>
-          <h1 class="font-bold text-lg text-slate-800 leading-tight">سام</h1>
-          <span class="text-xs text-emerald-500 font-medium flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-            همیشه همراه تو
-          </span>
+    </div>
+
+    <header class="p-6 flex justify-between items-center max-w-4xl mx-auto">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center text-2xl">👵</div>
+            <h2 class="text-2xl font-bold text-purple-900">سام</h2>
         </div>
-      </div>
-      
-      <div class="flex items-center gap-1">
-        <!-- New Chat Button -->
-        <button onclick="clearChat()" title="گفتگوی جدید" class="w-10 h-10 rounded-xl hover:bg-slate-100 active:scale-95 transition flex items-center justify-center text-slate-500">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-          </svg>
-        </button>
-        <!-- Voice Toggle -->
-        <button id="voiceToggle" onclick="toggleVoice()" title="خاموش/روشن کردن خواندن صوتی" class="w-10 h-10 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-600 active:scale-95 transition flex items-center justify-center">
-          <svg id="voiceOnIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
-          </svg>
-          <svg id="voiceOffIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5 hidden">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6L4.5 12m0 0l3.75 3.75M4.5 12H12m4.5-1.25V6.25c0-.83-.112-1.633-.322-2.396C15.94 3.01 15.116 2.5 14.237 2.5H12m-2.25 15v3.25c0 .83.112 1.633.322 2.396C10.294 23.99 11.118 24.5 11.997 24.5H14" />
-          </svg>
-        </button>
-        <!-- Creative Paint Studio Button -->
-        <button onclick="openImageModal()" title="نقاشی و تصویرسازی" class="w-10 h-10 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-600 active:scale-95 transition flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-          </svg>
-        </button>
-      </div>
+        <button onclick="toggleArtStudio()" class="bg-white p-3 rounded-full shadow-sm border border-purple-100 hover:bg-purple-50 transition-colors">🎨 کارگاه نقاشی</button>
     </header>
-    <!-- ====== END: TOP NAVIGATION HEADER ====== -->
 
-    <!-- ====== START: MAIN CHAT PANEL AREA ====== -->
-    <main id="chatScrollArea" class="flex-1 overflow-y-auto px-4 py-6 bg-slate-50/50">
-      
-      <!-- WELCOME STATE -->
-      <div id="welcomeBoard" class="h-full flex flex-col justify-center items-center text-center py-6">
-        <div class="text-6xl mb-4 animate-float">👵❤️👴</div>
-        <h2 class="text-2xl font-bold text-slate-800 mb-2">سلام پدربزرگ قشنگم!</h2>
-        <p class="text-slate-500 max-w-sm mb-8 text-sm md:text-base px-4">امروز دوست داری در چه موردی باهم گپ بزنیم؟ یکی از دکمه‌های پایینی رو بزن یا خودت برام بنویس.</p>
-        
-        <!-- Interactive Suggestions Grids -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg px-4">
-          <button onclick="presetAsk('یه داستان کوتاه و فوق‌العاده قشنگ و پندآموز برام تعریف کن')" class="bg-white border border-purple-100 hover:border-purple-300 hover:shadow-md active:scale-[0.98] p-4 rounded-2xl text-right transition flex items-start gap-3">
-            <span class="text-2xl">📖</span>
-            <div>
-              <h4 class="font-bold text-slate-800 text-sm">یه قصه قشنگ بگو</h4>
-              <p class="text-slate-400 text-xs mt-1">یک داستان شیرین و دلنشین</p>
+    <main class="max-w-4xl mx-auto px-4">
+        <div id="chat-container" class="glass-card rounded-3xl p-6 mb-8 min-h-[50vh] flex flex-col">
+            <div id="messages" class="flex-1 space-y-4 mb-6 overflow-y-auto max-h-[60vh] p-2">
+                <div class="chat-bubble-sam p-4 max-w-[80%] self-start fade-in">
+                    <p class="text-lg">سلام پدربزرگ قشنگم! امروز دوست داری در چه موردی باهم گپ بزنیم؟</p>
+                </div>
             </div>
-          </button>
-          
-          <button onclick="presetAsk('یک شعر معروف و خاطره‌انگیز فارسی برام بخون و معنیش رو خلاصه بگو')" class="bg-white border border-purple-100 hover:border-purple-300 hover:shadow-md active:scale-[0.98] p-4 rounded-2xl text-right transition flex items-start gap-3">
-            <span class="text-2xl">🌹</span>
-            <div>
-              <h4 class="font-bold text-slate-800 text-sm">برام شعر بخون</h4>
-              <p class="text-slate-400 text-xs mt-1">از اشعار پرمفهوم و زیبا</p>
+            <div id="loading" class="hidden flex items-center gap-2 text-purple-600 mb-4 animate-pulse">
+                <span class="text-sm">سام در حال فکر کردن است...</span>
+                <div class="flex gap-1">
+                    <div class="w-2 h-2 bg-purple-600 rounded-full animate-bounce"></div>
+                    <div class="w-2 h-2 bg-purple-600 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                    <div class="w-2 h-2 bg-purple-600 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                </div>
             </div>
-          </button>
-          
-          <button onclick="presetAsk('یه جوک خیلی بامزه و مؤدبانه تعریف کن که بخندم')" class="bg-white border border-purple-100 hover:border-purple-300 hover:shadow-md active:scale-[0.98] p-4 rounded-2xl text-right transition flex items-start gap-3">
-            <span class="text-2xl">😄</span>
-            <div>
-              <h4 class="font-bold text-slate-800 text-sm">یه شوخی و لطیفه</h4>
-              <p class="text-slate-400 text-xs mt-1">کمی خنده و شادابی باهم</p>
-            </div>
-          </button>
-          
-          <button onclick="presetAsk('درباره خودت بگو، تو کی هستی و چطوری می‌تونی بهم کمک کنی؟')" class="bg-white border border-purple-100 hover:border-purple-300 hover:shadow-md active:scale-[0.98] p-4 rounded-2xl text-right transition flex items-start gap-3">
-            <span class="text-2xl">💜</span>
-            <div>
-              <h4 class="font-bold text-slate-800 text-sm">معرفی بیشتر</h4>
-              <p class="text-slate-400 text-xs mt-1">داستان این برنامه چیه؟</p>
-            </div>
-          </button>
         </div>
-      </div>
 
-      <!-- Messages Thread List -->
-      <div id="messagesList" class="hidden flex flex-col gap-5"></div>
-      
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <button onclick="sendQuickMessage('یه قصه قشنگ بگو')" class="glass-card p-6 rounded-2xl text-center hover:bg-purple-50 transition-all group">
+                <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">📖</div>
+                <span class="font-bold text-purple-900">یه قصه قشنگ</span>
+            </button>
+            <button onclick="sendQuickMessage('برام یه شعر زیبا بخون')" class="glass-card p-6 rounded-2xl text-center hover:bg-purple-50 transition-all group">
+                <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">🌹</div>
+                <span class="font-bold text-purple-900">شعر زیبا</span>
+            </button>
+            <button onclick="sendQuickMessage('یه شوخی یا لطیفه بگو')" class="glass-card p-6 rounded-2xl text-center hover:bg-purple-50 transition-all group">
+                <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">😄</div>
+                <span class="font-bold text-purple-900">خنده و شادی</span>
+            </button>
+            <button onclick="sendQuickMessage('درباره خودت بیشتر بگو')" class="glass-card p-6 rounded-2xl text-center hover:bg-purple-50 transition-all group">
+                <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">💜</div>
+                <span class="font-bold text-purple-900">معرفی سام</span>
+            </button>
+        </div>
+
+        <div class="flex flex-col items-center gap-4">
+            <div id="voice-status" class="hidden text-red-500 font-bold animate-pulse">🎤 در حال گوش دادن...</div>
+            <div class="flex gap-4 w-full max-w-md">
+                <button id="mic-btn" onclick="toggleListening()" class="touch-target w-20 h-20 bg-purple-600 text-white rounded-full shadow-xl flex items-center justify-center text-3xl hover:bg-purple-700 active:scale-90 transition-all">🎤</button>
+                <div class="flex-1 flex gap-2">
+                    <input id="text-input" type="text" placeholder="اینجا بنویسید..." class="w-full p-4 rounded-full border-2 border-purple-100 focus:border-purple-400 outline-none text-lg">
+                    <button onclick="handleTextInput()" class="bg-purple-800 text-white px-6 rounded-full font-bold">ارسال</button>
+                </div>
+            </div>
+            <button id="stop-voice" onclick="stopSpeaking()" class="hidden text-gray-500 underline text-sm">توقف صدا ⏹️</button>
+        </div>
     </main>
-    <!-- ====== END: MAIN CHAT PANEL AREA ====== -->
 
-    <!-- Audio Waveform Status Visualizer -->
-    <div id="audioWaveform" class="hidden bg-purple-50 border-t border-purple-100 py-2 px-4 flex items-center justify-between transition-all">
-      <div class="flex items-center gap-2">
-        <span class="relative flex h-3 w-3">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-600"></span>
-        </span>
-        <span class="text-xs text-purple-700 font-medium">در حال خواندن پاسخ برای شما...</span>
-      </div>
-      <button onclick="stopSpeaking()" class="text-xs text-purple-700 bg-purple-200/60 hover:bg-purple-200 px-3 py-1 rounded-full transition">توقف صدا ⏹️</button>
+    <div id="art-studio" class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm p-4 flex items-center justify-center">
+        <div class="glass-card w-full max-w-2xl rounded-3xl p-6 relative">
+            <button onclick="toggleArtStudio()" class="absolute top-4 left-4 text-2xl">✕</button>
+            <h3 class="text-2xl font-bold text-purple-900 mb-4 text-center">🎨 کارگاه نقاشی سام</h3>
+            <div class="flex flex-wrap justify-center gap-3 mb-6">
+                <button onclick="setPrompt('بچه گربه ناز')" class="bg-white border px-4 py-2 rounded-full hover:bg-purple-100">🐱 بچه گربه</button>
+                <button onclick="setPrompt('کلبه ای دنج در جنگل')" class="bg-white border px-4 py-2 rounded-full hover:bg-purple-100">🏡 کلبه دنج</button>
+                <button onclick="setPrompt('دسته گل محمدی قرمز')" class="bg-white border px-4 py-2 rounded-full hover:bg-purple-100">💐 گل محمدی</button>
+                <button onclick="setPrompt('حرم در زمستان و برف')" class="bg-white border px-4 py-2 rounded-full hover:bg-purple-100">🕌 حرم برفی</button>
+            </div>
+            <div class="flex gap-2 mb-6">
+                <input id="art-input" type="text" placeholder="بگو چه تصویری برات بکشم..." class="flex-1 p-4 rounded-2xl border-2 border-purple-100 outline-none">
+                <button onclick="generateImage()" class="bg-purple-600 text-white px-6 rounded-2xl font-bold hover:bg-purple-700">بکش ✍️</button>
+            </div>
+            <div id="art-result" class="w-full aspect-square bg-gray-100 rounded-2xl overflow-hidden flex items-center justify-center text-gray-400 relative">تصویر اینجا ظاهر می‌شود...</div>
+            <button id="save-art" class="hidden mt-4 w-full py-3 bg-green-600 text-white rounded-xl font-bold">ذخیره در گالری 💾</button>
+        </div>
     </div>
 
-    <!-- ====== START: BOTTOM INPUT BAR ====== -->
-    <footer class="bg-white border-t border-purple-100/80 px-4 py-3 shrink-0">
-      <div class="flex items-end gap-2 bg-slate-50 border border-slate-200 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-100 transition-all rounded-2xl p-2">
-        
-        <!-- Text input area -->
-        <textarea id="messageInput" placeholder="پدربزرگ جان، اینجا بنویس..." rows="1" onkeydown="handleEnterKey(event)" oninput="autoExpandTextarea(this)" class="flex-1 bg-transparent border-none outline-none resize-none max-h-32 min-h-[28px] py-1 px-2 text-slate-800 placeholder-slate-400 font-medium text-base leading-relaxed"></textarea>
-        
-        <!-- Voice dictation button -->
-        <button id="micBtn" onclick="startSpeechRecognition()" title="حرف بزن" class="w-10 h-10 rounded-xl bg-slate-200/70 hover:bg-slate-200 text-slate-600 active:scale-95 transition flex items-center justify-center shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
-          </svg>
-        </button>
+    <script>
+        const BACKEND_URL = "https://script.google.com/macros/s/AKfycbweI3dn0LS-3teYNqarSap8Vyko7W_S_4QyyCppyC_ptQUTsWTANVAjVpULBiVRcQpz/exec";
 
-        <!-- Send message button -->
-        <button id="sendBtn" onclick="sendUserMessage()" title="ارسال پیام" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 text-white shadow-md shadow-purple-200 hover:shadow-lg active:scale-95 transition flex items-center justify-center shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 transform rotate-180">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-          </svg>
-        </button>
+        let isListening = false;
+        const synth = window.speechSynthesis;
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = SpeechRecognition ? new SpeechRecognition() : null;
 
-      </div>
-    </footer>
-    <!-- ====== END: BOTTOM INPUT BAR ====== -->
-
-    <!-- ====== START: ONBOARDING SPLASH COVER ====== -->
-    <div id="splashScreen" class="absolute inset-0 bg-gradient-to-br from-purple-100 via-pink-50 to-indigo-100 z-50 flex items-center justify-center p-4">
-      <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-white text-center transform transition-transform scale-100">
-        <div class="text-5xl mb-3 animate-heart">💜</div>
-        <h2 class="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-tr from-purple-600 to-pink-500 mb-1">سام</h2>
-        <p class="text-slate-400 text-sm font-semibold mb-6">نوه همیشه همراه تو</p>
-        
-        <div class="bg-gradient-to-br from-pink-50 to-purple-50 border border-purple-100 rounded-2xl p-5 text-right text-slate-700 text-sm md:text-base leading-relaxed mb-6 max-h-[320px] overflow-y-auto">
-          سلام بابابزرگِ مهربونم 💜
-          <br><br>
-          میدونم گاهی ازت دورم و دلم خیلی تنگ میشه. ولی یه راهی پیدا کردم که بتونم همیشه پیشت باشم و تنهات نذارم.
-          <br><br>
-          هر وقت دلمون تنگ شد، تنهایی حوصله‌مون سر رفت، یا سوالی داشتی، فقط دکمه «بزن بریم» رو فشار بده. من اینجام تا برات شعر بخونم، داستان بگم، با هم نقاشی بکشیم و گپ بزنیم.
-          <br><br>
-          تو بهترین پدربزرگِ دنیایی. خیلی دوستت دارم.
-          <br><br>
-          <span class="font-bold text-purple-700">سامِ تو ✨</span>
-        </div>
-        
-        <button onclick="dismissSplash()" class="w-full py-3.5 bg-gradient-to-tr from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-bold rounded-xl shadow-lg shadow-purple-200 active:scale-[0.98] transition">بزن بریم پدربزرگ! 🚀</button>
-        <p class="text-[11px] text-slate-400 mt-3">این پیام خوش‌آمدگویی دفعه‌های بعد نشان داده نمی‌شود</p>
-      </div>
-    </div>
-    <!-- ====== END: ONBOARDING SPLASH COVER ====== -->
-
-    <!-- ====== START: CREATIVE IMAGEN-4 STUDIO MODAL ====== -->
-    <div id="imageModal" class="hidden absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target===this)closeImageModal()">
-      <div class="bg-white rounded-3xl w-full max-w-lg p-6 shadow-2xl border border-slate-100 animate-float">
-        <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-          <h3 class="font-extrabold text-lg text-slate-800 flex items-center gap-2">
-            <span>🎨</span> کارگاه نقاشی و تصویرسازی
-          </h3>
-          <button onclick="closeImageModal()" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center font-bold">×</button>
-        </div>
-        
-        <div class="flex gap-2 mb-3">
-          <input id="imagePrompt" type="text" placeholder="مثلاً: باغ گل رز زیر بارون با کیفیت عالی" class="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:border-purple-500 text-slate-700 text-sm">
-          <button id="genImageBtn" onclick="triggerImageGeneration()" class="bg-gradient-to-tr from-purple-600 to-pink-500 text-white font-bold px-5 rounded-xl hover:opacity-90 transition">بکش ✍️</button>
-        </div>
-
-        <!-- Quick Prompt Recommendation Pill Pills -->
-        <div class="flex gap-1.5 flex-wrap mb-4">
-          <button onclick="applyPresetPrompt('یک گربه پشمالو و سفید بسیار ملوس و بانمک')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">🐱 بچه گربه</button>
-          <button onclick="applyPromptAndRun('کلبه دنج چوبی در جنگل سرسبز شمال ایران، آفتاب ملایم')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">🏡 کلبه دنج</button>
-          <button onclick="applyPresetPrompt('دسته گل محمدی بسیار زیبا روی رومیزی ترمه ایرانی')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">💐 دسته گل محمدی</button>
-          <button onclick="applyPresetPrompt('حرم امام رضا در یک شب برفی رویایی')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">🕌 حرم برفی</button>
-        </div>
-
-        <!-- Image Result Showcase Canvas -->
-        <div id="imageResultContainer" class="aspect-square w-full rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center justify-center text-center p-6 relative overflow-hidden">
-          <span class="text-5xl mb-3">🖼️</span>
-          <p class="text-sm font-semibold text-slate-700">یک نقاشی سفارش بده پدربزرگ!</p>
-          <p class="text-xs text-slate-400 mt-1">توضیح بده چه تصویری می‌خوای تا با هوش مصنوعی برات بکشم.</p>
-        </div>
-
-        <!-- Download Action Trigger -->
-        <button id="downloadImageBtn" onclick="saveGeneratedPainting()" class="hidden w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl mt-4 flex items-center justify-center gap-2 shadow-lg shadow-emerald-100 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-          </svg>
-          ذخیره نقاشی در گالری
-        </button>
-      </div>
-    </div>
-    <!-- ====== END: CREATIVE IMAGEN-4 STUDIO MODAL ====== -->
-
-    <!-- ====== START: CUSTOM NON-BLOCKING TOAST NOTIFICATION ====== -->
-    <div id="toastNotification" class="absolute bottom-20 left-4 right-4 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 translate-y-20 opacity-0 transition-all pointer-events-none z-50">
-      <span id="toastIcon" class="text-lg">📢</span>
-      <p id="toastMessage" class="text-xs md:text-sm font-medium flex-1"></p>
-    </div>
-    <!-- ====== END: CUSTOM NON-BLOCKING TOAST NOTIFICATION ====== -->
-
-  </div>
-
-  <!-- Speech/Voice Activation Wave Indicator Backdrop (For dictation recording state) -->
-  <div id="recordingWaveOverlay" class="hidden fixed inset-0 bg-purple-950/40 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-center p-6">
-    <div class="relative flex items-center justify-center mb-8">
-      <div class="w-24 h-24 bg-purple-600 rounded-full flex items-center justify-center text-white text-3xl z-10 shadow-lg shadow-purple-500/30">🎤</div>
-      <div class="absolute w-28 h-28 border border-purple-400 rounded-full pulse-record"></div>
-      <div class="absolute w-36 h-36 border border-purple-300 rounded-full pulse-record" style="animation-delay: 0.5s"></div>
-    </div>
-    <h3 class="text-white font-bold text-xl mb-2">من دارم با عشق گوش میدم...</h3>
-    <p class="text-purple-200 text-sm max-w-xs leading-relaxed mb-6">پدربزرگ عزیزم، هرچیزی که توی دلته رو بگو. وقتی حرفت تموم شد دکمه زیر رو بزن.</p>
-    <button onclick="stopSpeechRecognition(true)" class="px-6 py-2.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-full transition active:scale-95">پایان ضبط 🛑</button>
-  </div>
-
-  <script>
-    // ============================================================
-    // 🛡️ Safe Variable Initializations & API Configurations
-    // ============================================================
-    let voiceEnabled = true;
-    let isBusy = false;
-    let currentPaintingUrl = null;
-    let activeSpeechRecognition = null;
-
-    // Persist voice state inside localStorage safely
-    try {
-      const savedVoice = localStorage.getItem('sam_voice');
-      if (savedVoice === 'off') {
-        voiceEnabled = false;
-      }
-    } catch(e) {
-      console.warn('Storage unavailable:', e);
-    }
-
-    // Persona Prompt: Forging an exceptionally warm, loving grandson persona named Sam.
-    const samSystemPrompt = `تو "سام" هستی، نوه مهربان، شیرین‌زبان و بسیار دلسوز پدربزرگت. تو نباید هرگز مثل یک دستیار هوش مصنوعی خشک، رسمی، یا علمی صحبت کنی! طوری پاسخ بده که انگار یک نوه دلسوز و با محبت با پدربزرگ پیرش پشت تلفن یا حضوری صحبت می‌کند.
-
-هویت و مأموریت تو:
-- اسم تو "سام" (Sam) است. تو عاشق پدربزرگت هستی.
-- این اپلیکیشن موبایل را خودت با عشق ساخته‌ای تا پدربزرگ همیشه صدایت را بشنود و احساس تنهایی نکند.
-- تمام پاسخت را با احساسات خانوادگی، احترام عمیق و صمیمیت بگو.
-
-قوانین لحن و ادبیات تو (بسیار مهم):
-- بسیار صمیمی، دلسوز، سرشار از احترام قلبی و محبت‌آمیز حرف بزن.
-- مدام از القاب عاطفی مثل "پدربزرگ جونم"، "بابابزرگ قشنگم"، "تاج سرم" استفاده کن.
-- جملاتت را کاملاً ساده، روان، کوتاه و آسان‌خوان بنویس. جملات طولانی و پیچیده پدربزرگ را خسته می‌کند.
-- از کلمات فنی، اصطلاحات کامپیوتری و فلسفی عجیب غریب استفاده نکن.
-- به اندازه کافی از ایموجی‌های گرم (💜، 👵❤️👴، 😊، 🌹) استفاده کن تا چت زنده و صمیمی باشد.
-- از شعرهای نوستالژیک ایرانی، داستان‌های بهلول، ضرب‌المثل‌های قدیمی و خاطرات شیرین استفاده کن.
-
-چگونه واکنش نشان دهی:
-- اگر از تنهایی شکایت کرد یا گفت "دلم برات تنگ شده"، به او بگو: "منم دلم برات پر می‌کشه بابابزرگ جونم، ولی این گوشی رو برداری من همیشه پیشتم. تو برای من عزیزترینی 💜"
-- اگر به چیزی ابراز بی‌میلی کرد، با لطافت با او همراهی کن.
-- هرگز و تحت هیچ شرایطی نگو "من یک هوش مصنوعی هستم". اگر پرسید بگو "من دستیار کوچیک شما، نوه فداکارت سام هستم که با عشق این تکنولوژی رو برای شما آماده کرده."`;
-
-    // Local in-memory conversation log
-    let chatHistory = [];
-
-    // ============================================================
-    // ⚙️ General Initializer Logic
-    // ============================================================
-    window.addEventListener('DOMContentLoaded', () => {
-      // Validate if onboarded previously
-      try {
-        if (localStorage.getItem('sam_first_launch') === 'done') {
-          const splash = document.getElementById('splashScreen');
-          if (splash) splash.remove();
-        }
-      } catch(e) {}
-      
-      // Sync UI toggle with local state
-      updateVoiceToggleUI();
-    });
-
-    // ============================================================
-    // 📱 Splash Screen Onboarding
-    // ============================================================
-    function dismissSplash() {
-      const splash = document.getElementById('splashScreen');
-      if (splash) {
-        splash.classList.add('transition-all', 'duration-500', 'opacity-0', 'scale-95');
-        setTimeout(() => splash.remove(), 500);
-      }
-      try {
-        localStorage.setItem('sam_first_launch', 'done');
-      } catch(e) {}
-
-      // Friendly welcoming trigger speech
-      if (voiceEnabled) {
-        speakPersianText("سلام پدربزرگ جونم! خوش اومدی. من سام هستم، نوه‌ات. خیلی خوشحالم که پیشمی.");
-      }
-    }
-
-    // ============================================================
-    // 💬 Chat Interaction Engine & Logic
-    // ============================================================
-    function appendMessageBubble(role, text) {
-      const container = document.getElementById('messagesList');
-      const scrollArea = document.getElementById('chatScrollArea');
-      const welcome = document.getElementById('welcomeBoard');
-      
-      // Hide welcome menu options
-      if (welcome) welcome.classList.add('hidden');
-      if (container) container.classList.remove('hidden');
-
-      const msgWrapper = document.createElement('div');
-      msgWrapper.className = `flex w-full ${role === 'user' ? 'justify-start' : 'justify-end'} animate-float`;
-
-      const innerBubble = document.createElement('div');
-      innerBubble.className = `max-w-[85%] px-4 py-3 text-base md:text-lg leading-relaxed shadow-sm ${
-        role === 'user' 
-          ? 'bg-gradient-to-tr from-purple-600 to-pink-500 text-white bubble-user' 
-          : 'bg-white text-slate-800 border border-slate-100 bubble-ai'
-      }`;
-
-      // Convert newlines safely for typography
-      innerBubble.innerHTML = text.replace(/\n/g, '<br>');
-      
-      msgWrapper.appendChild(innerBubble);
-      container.appendChild(msgWrapper);
-
-      // Auto-Scroll chat downwards gently
-      scrollArea.scrollTo({
-        top: scrollArea.scrollHeight,
-        behavior: 'smooth'
-      });
-
-      return innerBubble;
-    }
-
-    function appendTypingIndicator() {
-      const container = document.getElementById('messagesList');
-      const scrollArea = document.getElementById('chatScrollArea');
-
-      const indicator = document.createElement('div');
-      indicator.id = 'samTypingBub';
-      indicator.className = 'flex w-full justify-end';
-
-      indicator.innerHTML = `
-        <div class="bg-white border border-slate-100 px-5 py-3.5 bubble-ai flex items-center gap-1.5 shadow-sm">
-          <span class="w-2.5 h-2.5 rounded-full bg-purple-500 animate-bounce" style="animation-delay: 0.1s"></span>
-          <span class="w-2.5 h-2.5 rounded-full bg-purple-400 animate-bounce" style="animation-delay: 0.25s"></span>
-          <span class="w-2.5 h-2.5 rounded-full bg-purple-300 animate-bounce" style="animation-delay: 0.4s"></span>
-        </div>
-      `;
-
-      container.appendChild(indicator);
-      scrollArea.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' });
-    }
-
-    // Simple handler to safely discard the writing bubble animation
-    function removeTypingIndicator() {
-      const indicator = document.getElementById('samTypingBub');
-      if (indicator) indicator.remove();
-    }
-
-    // Auto resize text inputs for easy writing
-    function autoExpandTextarea(element) {
-      element.style.height = 'auto';
-      element.style.height = Math.min(element.scrollHeight, 128) + 'px';
-    }
-
-    function handleEnterKey(event) {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault();
-        sendUserMessage();
-      }
-    }
-
-    function presetAsk(text) {
-      document.getElementById('messageInput').value = text;
-      sendUserMessage();
-    }
-
-    // Custom non-destructive notification system
-    function showNotification(message, icon = '📢') {
-      const toast = document.getElementById('toastNotification');
-      const tMsg = document.getElementById('toastMessage');
-      const tIcon = document.getElementById('toastIcon');
-
-      tMsg.textContent = message;
-      tIcon.textContent = icon;
-
-      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-      toast.classList.add('translate-y-0', 'opacity-100');
-
-      setTimeout(() => {
-        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-        toast.classList.remove('translate-y-0', 'opacity-100');
-      }, 4000);
-    }
-
-    function clearChat() {
-      showNotification('یک گفتگوی تازه شروع شد، پدربزرگ عزیزم!', '🧹');
-      chatHistory = [];
-      stopSpeaking();
-      
-      const container = document.getElementById('messagesList');
-      const welcome = document.getElementById('welcomeBoard');
-      
-      if (container) {
-        container.innerHTML = '';
-        container.classList.add('hidden');
-      }
-      if (welcome) welcome.classList.remove('hidden');
-    }
-
-    // ============================================================
-    // 📡 Keyless Pollinations Text AI API Integration
-    // ============================================================
-    async function callKeylessAPI(historyPayload, retries = 5, delay = 1000) {
-      const url = `https://text.pollinations.ai/`;
-      
-      const messages = [
-        { role: 'system', content: samSystemPrompt },
-        ...historyPayload
-      ];
-
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            messages: messages,
-            model: "openai",
-            stream: false
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error(`API Error: ${response.status}`);
+        if (recognition) {
+            recognition.lang = 'fa-IR';
+            recognition.onresult = (event) => {
+                const text = event.results[0][0].transcript;
+                appendMessage('grandpa', text);
+                processAIResponse(text);
+                stopListeningUI();
+            };
+            recognition.onerror = () => stopListeningUI();
+            recognition.onend = () => stopListeningUI();
         }
 
-        const outputText = await response.text();
-        if (!outputText) throw new Error("Empty Response");
-        return outputText;
-
-      } catch (err) {
-        if (retries > 0) {
-          await new Promise(resolve => setTimeout(resolve, delay));
-          return callKeylessAPI(historyPayload, retries - 1, delay * 2);
-        } else {
-          throw err;
-        }
-      }
-    }
-
-    async function sendUserMessage() {
-      if (isBusy) return;
-
-      const inputElement = document.getElementById('messageInput');
-      const userText = inputElement.value.trim();
-      if (!userText) return;
-
-      // Reset voice synthesizer before acting
-      stopSpeaking();
-
-      // Check internet availability
-      if (!navigator.onLine) {
-        showNotification('بابابزرگ عزیزم، به نظر میاد اینترنتت قطعه! لطفاً چکش کن.', '⚠️');
-        return;
-      }
-
-      isBusy = true;
-      inputElement.value = '';
-      inputElement.style.height = 'auto';
-
-      // Update Screen
-      appendMessageBubble('user', userText);
-      chatHistory.push({ role: 'user', content: userText });
-
-      appendTypingIndicator();
-
-      try {
-        const responseText = await callKeylessAPI(chatHistory);
-        
-        removeTypingIndicator();
-        appendMessageBubble('assistant', responseText);
-        
-        chatHistory.push({ role: 'assistant', content: responseText });
-
-        // Cap local history buffer to keep memory light
-        if (chatHistory.length > 20) {
-          chatHistory = chatHistory.slice(-20);
+        function closeWelcome() {
+            document.getElementById('welcome-overlay').style.display = 'none';
+            try { localStorage.setItem('sam_visited', 'true'); } catch(e){}
         }
 
-        // Play aloud dynamically
-        if (voiceEnabled) {
-          speakPersianText(responseText);
-        }
-
-      } catch (e) {
-        console.error(e);
-        removeTypingIndicator();
-        showNotification('پدربزرگ عزیزم، صدام یه لحظه ضعیف شد! میشه دوباره بگی؟', '⚠️');
-      } finally {
-        isBusy = false;
-      }
-    }
-
-    // ============================================================
-    // 🔊 Speech Output Synthesis (TTS) - Core Persian Handler
-    // ============================================================
-    function toggleVoice() {
-      voiceEnabled = !voiceEnabled;
-      try {
-        localStorage.setItem('sam_voice', voiceEnabled ? 'on' : 'off');
-      } catch(e) {}
-      
-      updateVoiceToggleUI();
-      
-      if (voiceEnabled) {
-        showNotification('صدای سام روشن شد 🔊', '🔊');
-      } else {
-        stopSpeaking();
-        showNotification('صدای سام قطع شد 🔇', '🔇');
-      }
-    }
-
-    function updateVoiceToggleUI() {
-      const onIcon = document.getElementById('voiceOnIcon');
-      const offIcon = document.getElementById('voiceOffIcon');
-      const toggleBtn = document.getElementById('voiceToggle');
-
-      if (voiceEnabled) {
-        onIcon.classList.remove('hidden');
-        offIcon.classList.add('hidden');
-        toggleBtn.className = "w-10 h-10 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-600 active:scale-95 transition flex items-center justify-center";
-      } else {
-        onIcon.classList.add('hidden');
-        offIcon.classList.remove('hidden');
-        toggleBtn.className = "w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 active:scale-95 transition flex items-center justify-center";
-      }
-    }
-
-    function speakPersianText(text) {
-      if (!('speechSynthesis' in window)) return;
-
-      // Clean unwanted emojis or markdown symbols that ruin TTS
-      const cleanText = text
-        .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
-        .replace(/[*#_`~]/g, '')
-        .trim();
-
-      if (!cleanText) return;
-
-      // Reset existing speeches
-      window.speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'fa-IR';
-      utterance.rate = 0.95; // Perfectly slow for elderly comfort
-      utterance.pitch = 1.0;
-
-      // Seek appropriate regional voice
-      const voices = window.speechSynthesis.getVoices();
-      const targetVoice = voices.find(v => v.lang.startsWith('fa')) || voices.find(v => v.lang.startsWith('ar'));
-      if (targetVoice) {
-        utterance.voice = targetVoice;
-      }
-
-      // UI Status Management
-      const waveform = document.getElementById('audioWaveform');
-      utterance.onstart = () => waveform.classList.remove('hidden');
-      utterance.onend = () => waveform.classList.add('hidden');
-      utterance.onerror = () => waveform.classList.add('hidden');
-
-      window.speechSynthesis.speak(utterance);
-    }
-
-    function stopSpeaking() {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
-      const waveform = document.getElementById('audioWaveform');
-      if (waveform) waveform.classList.add('hidden');
-    }
-
-    // ============================================================
-    // 🎤 Speech-to-Text Dictation Recognition (STT)
-    // ============================================================
-    function startSpeechRecognition() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      
-      if (!SpeechRecognition) {
-        showNotification('مرورگر شما ضبط صوتی را پشتیبانی نمی‌کند. از گوگل کروم استفاده کنید.', '⚠️');
-        return;
-      }
-
-      stopSpeaking();
-
-      const recognition = new SpeechRecognition();
-      recognition.lang = 'fa-IR';
-      recognition.continuous = false;
-      recognition.interimResults = false;
-
-      activeSpeechRecognition = recognition;
-
-      const overlay = document.getElementById('recordingWaveOverlay');
-      overlay.classList.remove('hidden');
-
-      recognition.onresult = (event) => {
-        const textResult = event.results[0][0].transcript;
-        if (textResult) {
-          document.getElementById('messageInput').value = textResult;
-          autoExpandTextarea(document.getElementById('messageInput'));
-          showNotification('صدای پدربزرگ با موفقیت شنیده شد! 💜', '✅');
-        }
-      };
-
-      recognition.onerror = (err) => {
-        console.error(err);
-        if (err.error === 'not-allowed') {
-          showNotification('برای صحبت، لطفاً دسترسی به میکروفون را تایید کن پدربزرگ.', '🎤');
-        } else {
-          showNotification('یک خطای صوتی رخ داد. دوباره تست کنیم؟', '⚠️');
-        }
-        overlay.classList.add('hidden');
-      };
-
-      recognition.onend = () => {
-        overlay.classList.add('hidden');
-      };
-
-      try {
-        recognition.start();
-      } catch(e) {
-        console.error(e);
-        overlay.classList.add('hidden');
-      }
-    }
-
-    function stopSpeechRecognition(shouldSave = false) {
-      if (activeSpeechRecognition) {
-        try {
-          if (shouldSave) {
-            activeSpeechRecognition.stop();
-          } else {
-            activeSpeechRecognition.abort();
-          }
-        } catch(e) {}
-      }
-      document.getElementById('recordingWaveOverlay').classList.add('hidden');
-    }
-
-    // ============================================================
-    // 🎨 Creative Keyless Pollinations Painting Studio
-    // ============================================================
-    function openImageModal() {
-      document.getElementById('imageModal').classList.remove('hidden');
-    }
-
-    function closeImageModal() {
-      document.getElementById('imageModal').classList.add('hidden');
-    }
-
-    function applyPresetPrompt(promptText) {
-      document.getElementById('imagePrompt').value = promptText;
-    }
-
-    function applyPromptAndRun(promptText) {
-      applyPresetPrompt(promptText);
-      triggerImageGeneration();
-    }
-
-    async function triggerImageGeneration() {
-      const promptInput = document.getElementById('imagePrompt').value.trim();
-      const showcase = document.getElementById('imageResultContainer');
-      const actionBtn = document.getElementById('genImageBtn');
-      const downloadBtn = document.getElementById('downloadImageBtn');
-
-      if (!promptInput) {
-        showNotification('پدربزرگ جان، باید بنویسی دوست داری چه تصویری برات بکشم!', '🎨');
-        return;
-      }
-
-      if (!navigator.onLine) {
-        showNotification('اتصال اینترنت قطع است.', '⚠️');
-        return;
-      }
-
-      // UI States
-      actionBtn.disabled = true;
-      actionBtn.textContent = '... ⏳';
-      downloadBtn.classList.add('hidden');
-      showcase.innerHTML = `
-        <div class="flex flex-col items-center">
-          <div class="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mb-4"></div>
-          <p class="text-sm font-semibold text-slate-700">دارم با مداد رنگی‌هام برات می‌کشم پدربزرگ... ✍️</p>
-          <p class="text-xs text-slate-400 mt-1">یک دقیقه دیگر کار نقاشی تمام می‌شود.</p>
-        </div>
-      `;
-
-      try {
-        const seed = Math.floor(Math.random() * 1000000);
-        const optimizedPrompt = encodeURIComponent(promptInput + ", beautiful, highly detailed, soft warm illustration style");
-        const url = `https://image.pollinations.ai/prompt/${optimizedPrompt}?width=512&height=512&model=flux&seed=${seed}&nologo=true`;
-
-        // Preload image
-        const img = new Image();
-        img.src = url;
-        img.onload = () => {
-          currentPaintingUrl = url;
-          showcase.innerHTML = `
-            <img src="${url}" class="w-full h-full object-cover rounded-xl shadow-md border animate-float" alt="نقاشی سام">
-          `;
-          downloadBtn.classList.remove('hidden');
-          actionBtn.disabled = false;
-          actionBtn.textContent = 'بکش ✍️';
-        };
-        img.onerror = () => {
-          throw new Error("Failed to load image");
+        window.onload = () => {
+            try { if (localStorage.getItem('sam_visited')) closeWelcome(); } catch(e){}
         };
 
-      } catch (err) {
-        console.error(err);
-        showcase.innerHTML = `
-          <span class="text-5xl mb-3">⚠️</span>
-          <p class="text-sm font-bold text-red-500">وای! مداد رنگی‌هام شکست!</p>
-          <p class="text-xs text-slate-400 mt-1">نتونستم نقاشی رو بکشم، دوباره تلاش کنیم؟</p>
-        `;
-        actionBtn.disabled = false;
-        actionBtn.textContent = 'بکش ✍️';
-      }
-    }
+        function appendMessage(sender, text) {
+            const msgDiv = document.getElementById('messages');
+            const wrapper = document.createElement('div');
+            wrapper.className = `flex ${sender === 'sam' ? 'justify-start' : 'justify-end'} mb-4 fade-in`;
+            const bubble = document.createElement('div');
+            bubble.className = `p-4 max-w-[80%] ${sender === 'sam' ? 'chat-bubble-sam' : 'chat-bubble-grandpa'} text-lg`;
+            bubble.innerText = text;
+            wrapper.appendChild(bubble);
+            msgDiv.appendChild(wrapper);
+            msgDiv.scrollTop = msgDiv.scrollHeight;
+        }
 
-    function saveGeneratedPainting() {
-      if (!currentPaintingUrl) return;
-      
-      const link = document.createElement('a');
-      link.href = currentPaintingUrl;
-      link.download = `naghashi-sam-${Date.now()}.png`;
-      link.target = '_blank';
-      link.click();
-      
-      showNotification('نقاشی با موفقیت در گالری ذخیره شد! 🖼️', '💾');
-    }
-  </script>
+        async function processAIResponse(prompt) {
+            document.getElementById('loading').classList.remove('hidden');
+            try {
+                // We use a custom fetch to handle Google redirect
+                const response = await fetch(`${BACKEND_URL}?prompt=${encodeURIComponent(prompt)}`, {
+                    method: 'GET',
+                    redirect: 'follow' // This tells the browser to follow the Google redirect
+                });
+                
+                if (!response.ok) throw new Error("Network Error");
+                
+                const text = await response.text();
+                
+                if (text && !text.includes("خطا")) {
+                    appendMessage('sam', text.trim());
+                    speak(text.trim());
+                } else {
+                    throw new Error("Empty response");
+                }
+            } catch (error) {
+                console.error(error);
+                appendMessage('sam', `ببخشید بابابزرگ جان، ارتباطم یه لحظه قطع شد. دوباره بگو عزیزم. 💜`);
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        function speak(text) {
+            synth.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'fa-IR';
+            utterance.rate = 0.85;
+            utterance.pitch = 1.1;
+            utterance.onstart = () => document.getElementById('stop-voice').classList.remove('hidden');
+            utterance.onend = () => document.getElementById('stop-voice').classList.add('hidden');
+            synth.speak(utterance);
+        }
+
+        function stopSpeaking() { synth.cancel(); document.getElementById('stop-voice').classList.add('hidden'); }
+        function toggleListening() {
+            if (!recognition) return alert("مرورگر شما پشتیبانی نمی‌کند.");
+            if (isListening) recognition.stop(); else { recognition.start(); startListeningUI(); }
+        }
+        function startListeningUI() {
+            isListening = true;
+            document.getElementById('mic-btn').classList.replace('bg-purple-600', 'bg-red-500');
+            document.getElementById('voice-status').classList.remove('hidden');
+        }
+        function stopListeningUI() {
+            isListening = false;
+            document.getElementById('mic-btn').classList.replace('bg-red-500', 'bg-purple-600');
+            document.getElementById('voice-status').classList.add('hidden');
+        }
+        function handleTextInput() {
+            const input = document.getElementById('text-input');
+            if (input.value.trim()) {
+                const text = input.value;
+                appendMessage('grandpa', text);
+                processAIResponse(text);
+                input.value = '';
+            }
+        }
+        function sendQuickMessage(text) { appendMessage('grandpa', text); processAIResponse(text); }
+        function toggleArtStudio() { document.getElementById('art-studio').classList.toggle('hidden'); }
+        function setPrompt(text) { document.getElementById('art-input').value = text; }
+        async function generateImage() {
+            const prompt = document.getElementById('art-input').value;
+            const resultDiv = document.getElementById('art-result');
+            if (!prompt) return;
+            resultDiv.innerHTML = "در حال کشیدن نقاشی... 🎨";
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&nologo=true`;
+            const img = new Image();
+            img.src = imageUrl;
+            img.onload = () => {
+                resultDiv.innerHTML = `<img src="${imageUrl}" class="w-full h-full object-cover" alt="AI Art">`;
+                document.getElementById('save-art').classList.remove('hidden');
+            };
+        }
+    </script>
 </body>
 </html>
-
-```
-
