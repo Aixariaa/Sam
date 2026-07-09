@@ -137,8 +137,8 @@
         // ==================== CONFIG ====================
         const BACKEND_URL = "https://script.google.com/macros/s/AKfycbweI3dn0LS-3teYNqarSap8Vyko7W_S_4QyyCppyC_ptQUTsWTANVAjVpULBiVRcQpz/exec";
         const MAX_RETRIES = 3;
-        const DEBOUNCE_DELAY = 800; // ms - increased for stability
-        const REQUEST_TIMEOUT = 15000; // 15 seconds
+        const DEBOUNCE_DELAY = 800;
+        const REQUEST_TIMEOUT = 15000;
         let lastRequestTime = 0;
         let requestInProgress = false;
         let isOnline = navigator.onLine;
@@ -163,7 +163,6 @@
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = SpeechRecognition ? new SpeechRecognition() : null;
 
-        // Check for speech support and show warning if unavailable
         if (!SpeechRecognition) {
             document.getElementById('voice-warning').classList.remove('hidden');
             document.getElementById('mic-btn').disabled = true;
@@ -209,7 +208,7 @@
             };
         }
 
-        // ==================== TEXT-TO-SPEECH FALLBACK ====================
+        // ==================== TEXT-TO-SPEECH ====================
         function speak(text) {
             if (!synth) {
                 console.warn('Speech synthesis not supported');
@@ -266,7 +265,6 @@
                 console.warn('localStorage unavailable:', e);
             }
 
-            // Register service worker
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('./sw.js')
                     .then((reg) => console.log('✓ Service Worker Registered'))
@@ -295,14 +293,14 @@
             msgDiv.scrollTop = msgDiv.scrollHeight;
         }
 
-        // ==================== DEBOUNCE & RATE LIMITING ====================
+        // ==================== RATE LIMITING ====================
         function canProcessRequest() {
             if (!isOnline) {
-                console.warn('Offline - cannot process request');
+                console.warn('Offline - cannot process');
                 return false;
             }
             if (requestInProgress) {
-                console.warn('Request already in progress');
+                console.warn('Request in progress');
                 return false;
             }
             const now = Date.now();
@@ -314,7 +312,7 @@
             return true;
         }
 
-        // ==================== ROBUST FETCH WITH TIMEOUT ====================
+        // ==================== FETCH WITH TIMEOUT ====================
         function fetchWithTimeout(url, options = {}, timeout = REQUEST_TIMEOUT) {
             return Promise.race([
                 fetch(url, options),
@@ -324,7 +322,7 @@
             ]);
         }
 
-        // ==================== AI RESPONSE WITH ADVANCED ERROR HANDLING ====================
+        // ==================== AI RESPONSE WITH ERROR HANDLING ====================
         async function processAIResponse(prompt, retryCount = 0) {
             if (!canProcessRequest()) return;
 
@@ -334,7 +332,6 @@
             document.getElementById('mic-btn').disabled = true;
 
             try {
-                // Validate backend URL
                 if (!BACKEND_URL || !BACKEND_URL.includes('script.google.com')) {
                     throw new Error('Invalid backend configuration');
                 }
@@ -342,7 +339,7 @@
                 const encodedPrompt = encodeURIComponent(prompt);
                 const requestUrl = `${BACKEND_URL}?prompt=${encodedPrompt}`;
 
-                console.log(`📤 Sending request (attempt ${retryCount + 1}/${MAX_RETRIES})...`);
+                console.log(`📤 Request attempt ${retryCount + 1}/${MAX_RETRIES}`);
 
                 const response = await fetchWithTimeout(requestUrl, {
                     method: 'GET',
@@ -358,7 +355,7 @@
                     if (response.status === 401 || response.status === 403) {
                         throw new Error('Invalid API Key or Access Denied');
                     } else if (response.status >= 500) {
-                        throw new Error('Server Error - ' + statusText);
+                        throw new Error('Server Error');
                     } else if (response.status === 404) {
                         throw new Error('Backend not found');
                     }
@@ -366,15 +363,14 @@
                 }
                 
                 const text = await response.text();
-                console.log('📥 Response received:', text.substring(0, 50) + '...');
                 
                 if (!text || text.trim().length === 0) {
                     throw new Error('Empty response');
                 }
 
                 if (text.includes('خطا') || text.includes('error') || text.includes('Error')) {
-                    console.warn('Backend error response:', text);
-                    throw new Error('Backend error: ' + text);
+                    console.warn('Backend error:', text);
+                    throw new Error('Backend returned error');
                 }
 
                 const trimmedText = text.trim();
@@ -383,31 +379,28 @@
                 console.log('✓ Success');
 
             } catch (error) {
-                console.error('❌ AI Response Error:', error.message);
+                console.error('❌ Error:', error.message);
 
-                // Specific error messages
                 let userMessage = '';
                 if (error.message.includes('timeout')) {
                     userMessage = 'بابابزرگ جان، جواب طولانی شد. لطفا دوباره سعی کن. 💜';
                 } else if (error.message.includes('Invalid API Key')) {
-                    userMessage = 'خطای احراز هویت. سیستم سام مشکل دارد. 💜';
-                } else if (error.message.includes('Network')) {
+                    userMessage = 'خطای احراز هویت سام. مشکلی رخ داده. 💜';
+                } else if (error.message.includes('Network') || error.message.includes('Failed')) {
                     userMessage = 'مشکل شبکه. اینترنت خود را بررسی کن. 💜';
-                } else if (error.message.includes('Server Error')) {
+                } else if (error.message.includes('Server')) {
                     userMessage = 'سرور خراب است. بعدا دوباره سعی کن. 💜';
                 } else {
-                    userMessage = `خطا: ${error.message}. دوباره سعی کن. 💜`;
+                    userMessage = 'خطا رخ داد. دوباره سعی کن لطفا. 💜';
                 }
 
-                // Retry logic
                 if (retryCount < MAX_RETRIES) {
-                    console.log(`⏳ Retrying in 2 seconds... (${retryCount + 1}/${MAX_RETRIES})`);
+                    console.log(`⏳ Retry in 2s...`);
                     await new Promise(resolve => setTimeout(resolve, 2000));
                     requestInProgress = false;
                     return processAIResponse(prompt, retryCount + 1);
                 }
 
-                // Final fallback after all retries exhausted
                 appendMessage('error', userMessage);
                 speak(userMessage);
             } finally {
@@ -425,7 +418,7 @@
                 return;
             }
             if (!recognition) {
-                alert("مرورگر شما پشتیبانی نمی‌کند.");
+                alert('مرورگر شما پشتیبانی نمی‌کند.');
                 return;
             }
             
@@ -435,8 +428,8 @@
                 try {
                     recognition.start();
                 } catch (error) {
-                    console.error('Error starting recognition:', error);
-                    appendMessage('error', 'نتوانستم صوت شما را بگیرم. لطفا متن بنویسید. 💜');
+                    console.error('Recognition error:', error);
+                    appendMessage('error', 'نتوانستم صوت شما را بگیرم. متن بنویسید. 💜');
                 }
             }
         }
@@ -531,7 +524,7 @@
                 img.src = imageUrl;
 
             } catch (error) {
-                console.error('Image generation error:', error);
+                console.error('Image error:', error);
                 resultDiv.innerHTML = '<div class="flex flex-col items-center justify-center h-full"><div class="text-4xl mb-2">⚠️</div><p class="text-amber-600 font-bold">خطای شبکه</p></div>';
                 document.getElementById('save-art').classList.add('hidden');
                 generateBtn.disabled = false;
