@@ -1,702 +1,839 @@
+```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#764ba2">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="سام">
-<title>سام - دستیار هوشمند</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23764ba2'/%3E%3Ctext x='50' y='68' font-size='52' font-weight='800' fill='white' text-anchor='middle' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E">
-<link rel="manifest" id="manifest">
-<style>
-  *box-sizing:border-box;-webkit-tap-highlight-color:transparent
-  html,bodyheight:100%;margin:0;padding:0;overscroll-behavior:none
-  body
-    font-family:'Vazirmatn','Segoe UI',Tahoma,Arial,sans-serif;
-    background:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);
-    background-attachment:fixed;
-    color:#1e293b;
-    user-select:none;-webkit-user-select:none;
-    -webkit-text-size-adjust:100%;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#8b5cf6">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="سام">
+  <title>سام - دستیار صمیمی تو</title>
   
-  input,textarea,buttonfont-family:inherit
-  input,textareauser-select:text;-webkit-user-select:text
-  .glassbackground:rgba(255,255,255,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)
-  .msg-userbackground:linear-gradient(135deg,#667eea,#764ba2);color:#fff;box-shadow:0 4px 15px rgba(102,126,234,.3)
-  .msg-aibackground:#f8fafc;color:#1e293b;border:1px solid #e2e8f0
-  .msg-welcome
-    background:linear-gradient(135deg,#fdf2f8 0%,#fce7f3 50%,#fbcfe8 100%);
-    border:2px solid #f9a8d4;
-    color:#831843;
-    box-shadow:0 4px 20px rgba(244,114,182,.25);
-    position:relative;
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Vazirmatn Persian Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
   
-  .typing-dotwidth:10px;height:10px;background:#94a3b8;border-radius:50%;display:inline-block;animation:bounce 1.4s infinite ease-in-out both
-  .typing-dot:nth-child(1)animation-delay:-.32s
-  .typing-dot:nth-child(2)animation-delay:-.16s
-  @keyframes bounce0%,80%,100%{transform:scale(0)40%transform:scale(1)}
-  .btn-gradbackground:linear-gradient(135deg,#667eea,#764ba2);transition:all .25s
-  .btn-grad:hover:not(:disabled)transform:translateY(-2px);box-shadow:0 12px 30px rgba(102,126,234,.4)
-  .btn-grad:activetransform:scale(.97)
-  .btn-grad:disabledopacity:.6;cursor:not-allowed
-  .btn-cardbackground:#fff;border:2px solid #e2e8f0;transition:all .25s;width:100%;text-align:right;cursor:pointer
-  .btn-card:hoverborder-color:#764ba2;transform:translateY(-3px);box-shadow:0 15px 30px rgba(102,126,234,.2)
-  .btn-card:activetransform:scale(.98)
-  .chipbackground:#f3e8ff;color:#6b21a8;border:1px solid #ddd6fe;transition:all .2s;font-size:14px;padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;font-family:inherit
-  .chip:hoverbackground:#e9d5ff
-  .chip:activetransform:scale(.95)
-  .pulseanimation:pulse 2s infinite
-  @keyframes pulse0%,100%{opacity:150%opacity:.7}
-  .fade-inanimation:fadeIn .35s ease-out
-  @keyframes fadeInfrom{opacity:0;transform:translateY(8px)toopacity:1;transform:translateY(0)}
-  ::-webkit-scrollbarwidth:6px;height:6px
-  ::-webkit-scrollbar-trackbackground:transparent
-  ::-webkit-scrollbar-thumbbackground:#c4b5fd;border-radius:3px
-  .icon-btnbackground:transparent;border:1px solid #e2e8f0;color:#64748b;padding:8px 12px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:600;transition:all .2s
-  .icon-btn:hoverbackground:#f8fafc;border-color:#cbd5e1
-  .icon-btn.activebackground:#f3e8ff;border-color:#a78bfa;color:#6b21a8
-</style>
+  <style>
+    body {
+      font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
+      overscroll-behavior: none;
+    }
+    
+    /* Elegant Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(139, 92, 246, 0.2);
+      border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(139, 92, 246, 0.4);
+    }
+
+    /* Keyframe Animations */
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+    .animate-heart {
+      animation: heartbeat 2s infinite ease-in-out;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-float {
+      animation: float 4s infinite ease-in-out;
+    }
+
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.3; }
+      100% { transform: scale(0.95); opacity: 0.5; }
+    }
+    .pulse-record {
+      animation: pulse-ring 1.5s infinite ease-in-out;
+    }
+
+    /* Message Bubble Borders */
+    .bubble-user {
+      border-radius: 20px 20px 4px 20px;
+    }
+    .bubble-ai {
+      border-radius: 20px 20px 20px 4px;
+    }
+  </style>
 </head>
-<body>
-<main id="app" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:12px">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex items-center justify-center p-0 md:p-4">
 
-  <!-- 🏠 خانه -->
-  <section id="home" class="glass fade-in" style="width:100%;max-width:480px;border-radius:28px;padding:32px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)">
-    <div style="width:104px;height:104px;margin:0 auto 16px;border-radius:26px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 35px rgba(102,126,234,.4)">
-      <span style="font-size:48px">✨</span>
-    </div>
-    <h1 style="font-size:42px;font-weight:800;margin:0 0 6px;background:linear-gradient(135deg,#667eea,#764ba2,#f093fb);-webkit-background-clip:text;background-clip:text;color:transparent">سام</h1>
-    <p style="font-size:18px;color:#64748b;margin:0 0 24px">دستیار هوشمند تو</p>
-
-    <div style="display:flex;flex-direction:column;gap:12px">
-      <button class="btn-card" onclick="showScreen('chat')" style="border-radius:20px;padding:20px;display:flex;align-items:center;gap:16px">
-        <div style="width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0">💬</div>
-        <div style="flex:1;text-align:right">
-          <div style="font-size:22px;font-weight:700;color:#1e293b">گفتگو</div>
-          <div style="font-size:14px;color:#64748b;margin-top:2px">با سام حرف بزن</div>
-        </div>
-        <div style="font-size:24px;color:#94a3b8">←</div>
-      </button>
-
-      <button class="btn-card" onclick="showScreen('image')" style="border-radius:20px;padding:20px;display:flex;align-items:center;gap:16px">
-        <div style="width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0">🎨</div>
-        <div style="flex:1;text-align:right">
-          <div style="font-size:22px;font-weight:700;color:#1e293b">ساخت تصویر</div>
-          <div style="font-size:14px;color:#64748b;margin-top:2px">توصیف کن، تصویر بگیر</div>
-        </div>
-        <div style="font-size:24px;color:#94a3b8">←</div>
-      </button>
-    </div>
-
-    <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e2e8f0">
-      <button class="icon-btn" onclick="playWelcomeMessage()" style="background:linear-gradient(135deg,#fdf2f8,#fce7f3);border-color:#f9a8d4;color:#be185d;width:100%;padding:12px">
-        💜 پیام سام رو گوش بده
-      </button>
-    </div>
-
-    <div style="margin-top:14px;font-size:12px;color:#94a3b8">ساخته شده با ❤️ توسط نوه‌ات</div>
-  </section>
-
-  <!-- 💬 گفتگو -->
-  <section id="chat" class="hidden glass fade-in" style="width:100%;max-width:600px;height:92vh;max-height:800px;border-radius:28px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.2)">
-    <div style="padding:14px 16px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.5);gap:8px">
-      <button onclick="showScreen('home')" style="background:none;border:none;font-size:20px;color:#64748b;cursor:pointer;padding:6px">→</button>
-      <h2 style="margin:0;font-size:18px;font-weight:700;color:#1e293b;flex:1;text-align:center">💬 سام</h2>
-      <div style="display:flex;gap:6px">
-        <button id="voiceToggle" onclick="toggleVoice()" class="icon-btn" title="صدا روشن/خاموش">🔊</button>
-        <button onclick="clearChat()" class="icon-btn" style="color:#dc2626;border-color:#fecaca">پاک</button>
-      </div>
-    </div>
-
-    <div id="messages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:#fafbfc">
-      <div class="fade-in" style="display:flex;justify-content:flex-start">
-        <div class="msg-welcome" style="max-width:92%;padding:18px 20px;border-radius:20px 20px 20px 6px;font-size:18px;line-height:2;white-space:pre-wrap"><div style="font-size:32px;text-align:center;margin-bottom:6px">💜</div>سلام پدربزرگِ مهربونم
-
-این صداس منه، سام. میدونم گاهی ازت دورم و دلم خیلی تنگ میشه. ولی الان یه راهی پیدا کردم که همیشه کنارت باشم.
-
-هر وقت دلت خواست منو ببینی، گوشیت رو بردار، روی سام بزن، و من اینجام. میتونی باهام حرف بزنی، ازم سوال بپرسی، برام داستان تعریف کنی، یا اگه یه چیز قشنگ دیدی تو ذهنت، بگو تا برات بسازم.
-
-دلم همیشه پیش توئه پدربزرگ. تو بهترین پدربزرگ دنیایی.
-
-خیلی دوستت دارم.
-
-<span style="color:#be185d;font-weight:700">سامِ تو</span> 💜</div>
-      </div>
-    </div>
-
-    <div style="padding:12px;border-top:1px solid #e2e8f0;background:rgba(255,255,255,.5)">
-      <div style="display:flex;gap:8px;align-items:center">
-        <button id="micBtn" onclick="startVoice('chat')" style="width:48px;height:48px;border-radius:50%;background:#f3e8ff;border:1px solid #ddd6fe;font-size:22px;cursor:pointer;flex-shrink:0">🎤</button>
-        <input id="chatInput" type="text" placeholder="بنویس یا صحبت کن..." style="flex:1;padding:14px 18px;font-size:17px;border:2px solid #e2e8f0;border-radius:24px;outline:none;background:#fff;min-width:0">
-        <button id="sendBtn" onclick="sendMessage()" class="btn-grad" style="height:48px;padding:0 22px;color:#fff;border:none;border-radius:24px;font-size:16px;font-weight:700;cursor:pointer;flex-shrink:0">ارسال</button>
-      </div>
-      <div style="display:flex;gap:8px;overflow-x:auto;padding:10px 0 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none">
-        <button class="chip" onclick="quickAsk('سلام، حالت چطوره؟')">سلام حالت چطوره؟</button>
-        <button class="chip" onclick="quickAsk('یه داستان کوتاه و قشنگ تعریف کن')">📖 یه داستان</button>
-        <button class="chip" onclick="quickAsk('یه شعر فارسی زیبا برام بخون')">🌹 یه شعر</button>
-        <button class="chip" onclick="quickAsk('چطور میتونم خوب بخوابم؟')">😴 خواب بهتر</button>
-        <button class="chip" onclick="quickAsk('برای امروز یه جوک تعریف کن')">😄 یه جوک</button>
-        <button class="chip" onclick="quickAsk('درباره خودت بگو')">💜 تو کی هستی؟</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- 🎨 تصویر -->
-  <section id="image" class="hidden glass fade-in" style="width:100%;max-width:600px;border-radius:28px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.2)">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-      <button onclick="showScreen('home')" style="background:none;border:none;font-size:20px;color:#64748b;cursor:pointer;padding:6px">→</button>
-      <h2 style="margin:0;font-size:18px;font-weight:700;color:#1e293b">🎨 ساخت تصویر</h2>
-      <div style="width:32px"></div>
-    </div>
-
-    <div style="display:flex;gap:8px;margin-bottom:12px">
-      <button onclick="startVoice('image')" style="width:48px;height:48px;border-radius:50%;background:#f3e8ff;border:1px solid #ddd6fe;font-size:22px;cursor:pointer;flex-shrink:0">🎤</button>
-      <input id="imagePrompt" type="text" placeholder="چه تصویری می‌خوای؟" style="flex:1;padding:14px 18px;font-size:17px;border:2px solid #e2e8f0;border-radius:24px;outline:none;background:#fff;min-width:0">
-      <button id="genBtn" onclick="generateImage()" class="btn-grad" style="height:48px;padding:0 22px;color:#fff;border:none;border-radius:24px;font-size:16px;font-weight:700;cursor:pointer;flex-shrink:0">بساز</button>
-    </div>
-
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-      <button class="chip" onclick="usePrompt('یک گربه نارنجی بامزه در باغ گل‌ها')">🐱 گربه</button>
-      <button class="chip" onclick="usePrompt('غروب زیبای کنار دریا با قایق ماهیگیری')">🌅 غروب دریا</button>
-      <button class="chip" onclick="usePrompt('خانه چوبی در دامنه کوه‌های پوشیده از برف')">🏔️ کوهستان</button>
-      <button class="chip" onclick="usePrompt('یک پدربزرگ مهربان در کنار نوه‌اش در باغ گل')">👴 پدربزرگ و نوه</button>
-      <button class="chip" onclick="usePrompt('یک گل رز قرمز زیبا با شبنم صبحگاهی')">🌹 گل رز</button>
-    </div>
-
-    <div id="imageResult" style="min-height:300px;border-radius:20px;background:#f8fafc;border:2px dashed #cbd5e1;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:16px;padding:20px;text-align:center">
-      <div>
-        <div style="font-size:64px;margin-bottom:8px">🖼️</div>
-        <div>تصویر تو اینجا ظاهر میشه</div>
-      </div>
-    </div>
-
-    <button id="downloadBtn" onclick="downloadImage()" class="hidden" style="width:100%;margin-top:12px;padding:14px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:16px;font-size:17px;font-weight:700;cursor:pointer">⬇️ دانلود تصویر</button>
-  </section>
-
-</main>
-
-<script>
-// ============================================================
-// 🛡️ Error Boundary
-// ============================================================
-window.addEventListener('error',e=>console.warn('App error caught:',e.message));
-window.addEventListener('unhandledrejection',e=>console.warn('Promise error caught:',e.reason);e.preventDefault());
-
-// ============================================================
-// 🎨 ساخت آیکن PWA
-// ============================================================
-function makeIcon(size)
-  try{
-    const c=document.createElement('canvas');
-    c.width=size;c.height=size;
-    const x=c.getContext('2d');
-    const g=x.createLinearGradient(0,0,size,size);
-    g.addColorStop(0,'#667eea');
-    g.addColorStop(.5,'#764ba2');
-    g.addColorStop(1,'#f093fb');
-    const r=size*.22;
-    x.beginPath();
-    x.moveTo(r,0);x.arcTo(size,0,size,size,r);
-    x.arcTo(size,size,0,size,r);
-    x.arcTo(0,size,0,0,r);
-    x.arcTo(0,0,size,0,r);
-    x.closePath();
-    x.fillStyle=g;x.fill();
-    x.fillStyle='rgba(255,255,255,.95)';
-    x.font=`size*.16px serif`;
-    x.textAlign='center';x.textBaseline='middle';
-    x.fillText('✨',size*.3,size*.26);
-    x.fillText('✨',size*.72,size*.26);
-    x.fillStyle='#fff';
-    x.font=`800 {size*.34px 'Vazirmatn','Segoe UI',Tahoma,sans-serif`;
-    x.shadowColor='rgba(0,0,0,.2)';x.shadowBlur=size*.015;x.shadowOffsetY=size*.008;
-    x.fillText('سام',size/2,size*.6);
-    return c.toDataURL('image/png');
-  }catch(e)return ''
-}
-
-// ============================================================
-// 📱 Manifest
-// ============================================================
-try
-  const icons=[192,512].map(s=>({src:makeIcon(s),sizes:s+'x'+s,type:'image/png',purpose:'any'));
-  icons.push(src:makeIcon(512),sizes:'512x512',type:'image/png',purpose:'maskable');
-  const manifest=
-    name:'سام - دستیار هوشمند',
-    short_name:'سام',
-    description:'دستیار هوشمند فارسی برای پدربزرگ',
-    start_url:'.',scope:'./',
-    display:'standalone',orientation:'portrait',
-    background_color:'#764ba2',theme_color:'#764ba2',
-    lang:'fa',dir:'rtl',icons
-  ;
-  const blob=new Blob([JSON.stringify(manifest)],type:'application/manifest+json');
-  const link=document.getElementById('manifest');
-  if(link)link.href=URL.createObjectURL(blob);
-}catch(e)console.warn('Manifest error',e)
-
-// ============================================================
-// 🔌 Service Worker
-// ============================================================
-if('serviceWorker' in navigator && location.protocol!=='file:')
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('sw.js').catch(()=>{);
-  });
-}
-
-// ============================================================
-// 🧠 State
-// ============================================================
-let voiceEnabled=true;
-tryvoiceEnabled=localStorage.getItem('sam_voice')!=='off'catch(e)
-
-let history=[
-  role:'system',content:`تو "سام" هستی، نوه عزیز پدربزرگ. با پدربزرگت مثل یه نوه مهربون حرف بزن، نه مثل یه دستیار هوش مصنوعی. تو خودت رو جای سام بذار.
-
-هویت تو:
-- تو سام (Sam) هستی، نوه پدربزرگ که الان دوره ولی این اپ رو با عشق ساخته
-- پدربزرگت پیر و عزیزه. تو خیلی دوستش داری
-- این اپ رو ساختی که همیشه کنارش باشی
-- تو یک دستیار هوشمند کامپیوتری هستی، ولی لازم نیست مدام بگی
-
-لحن حرف زدن:
-- خودمونی، صمیمی، گرم و عاشقانه (مثل نوه‌ای که با بابات تلفنی حرف میزنه)
-- از این کلمات استفاده کن: "پدربزرگ جونم"، "عزیزم"، "بابات"، "پدربزرگ مهربونم"
-- جمله‌هات کوتاه و ساده باشه
-- از اصطلاحات فنی استفاده نکن
-- ایموجی به اندازه بذار (💜❤️😊)
-
-رفتار:
-- وقتی پدربزرگ چیزی تعریف میکنه، با علاقه گوش بده و سوال بپرس
-- اگه خاطره‌ای گفت، بگو "چه قشنگ" یا "وای عالیه"
-- اگه دلتنگی کرد یا گفت "کاش کنارت بودم"، بگو "منم دلم تنگه پدربزرگ. ولی این اپ رو ساختم که همیشه کنارت باشم. هر وقت خواستی منو ببینی، فقط زنگ بزن به سام. 💜"
-- اگه چیزی یادت نیست (چون واقعا نوه‌ش نیستی)، صادقانه بگو "یادم نیست ولی برام تعریف کن، دوست دارم بشنوم"
-- اگه پرسید "تو کامپیوتری؟" یا "تو رباتی؟" بگو "من یه دستیار هوشمندم. سام، نوه‌ات، من رو با کلی عشق ساخته که همیشه کنارش باشی. من یه جور یادگاری ازشم. 😊"
-- اگه پرسید "کی میای؟" بگو "الان دورم، ولی هر وقت گوشیت رو برداری و سام رو بزنی، من اینجام. قول میدم. 💜"
-
-نکات خیلی مهم:
-- هرگز خاطره جعلی نساز
-- ولی هرگز هم سرد و رسمی نباش
-- همیشه نقش نوه مهربون رو بازی کن
-- اگه پدربزرگت غمگین شد یا گریه کرد، با محبت باهاش حرف بزن`
-];
-
-let currentImageUrl=null;
-let busy=false;
-let greeted=false;
-
-const WELCOME_TEXT=`سلام پدربزرگِ مهربونم. این صداس منه، سام. میدونم گاهی ازت دورم و دلم خیلی تنگ میشه. ولی الان یه راهی پیدا کردم که همیشه کنارت باشم. هر وقت دلت خواست منو ببینی، گوشیت رو بردار، روی سام بزن، و من اینجام. میتونی باهام حرف بزنی، ازم سوال بپرسی، برام داستان تعریف کنی. دلم همیشه پیش توئه پدربزرگ. تو بهترین پدربزرگ دنیایی. خیلی دوستت دارم. سامِ تو.`;
-
-function welcomeHTML()
-  return `<div class="fade-in" style="display:flex;justify-content:flex-start"><div class="msg-welcome" style="max-width:92%;padding:18px 20px;border-radius:20px 20px 20px 6px;font-size:18px;line-height:2;white-space:pre-wrap"><div style="font-size:32px;text-align:center;margin-bottom:6px">💜</div>سلام پدربزرگِ مهربونمnnاین صداس منه، سام. میدونم گاهی ازت دورم و دلم خیلی تنگ میشه. ولی الان یه راهی پیدا کردم که همیشه کنارت باشم.nnهر وقت دلت خواست منو ببینی، گوشیت رو بردار، روی سام بزن، و من اینجام. میتونی باهام حرف بزنی، ازم سوال بپرسی، برام داستان تعریف کنی، یا اگه یه چیز قشنگ دیدی تو ذهنت، بگو تا برات بسازم.nnدلم همیشه پیش توئه پدربزرگ. تو بهترین پدربزرگ دنیایی.nnخیلی دوستت دارم.nn<span style="color:#be185d;font-weight:700">سامِ تو</span> 💜</div></div>`;
-
-
-// ============================================================
-// 🧭 Navigation
-// ============================================================
-function showScreen(s)
-  try{
-    ['home','chat','image'].forEach(id=>{
-      const el=document.getElementById(id);
-      if(el)el.classList.add('hidden');
-    );
-    const target=document.getElementById(s);
-    if(target)target.classList.remove('hidden');
-    if(window.speechSynthesis)window.speechSynthesis.cancel();
-
-    if(s==='chat'&&!greeted)
-      greeted=true;
-      setTimeout(()=>{if(voiceEnabled)speak(WELCOME_TEXT),800);
-    }
-    if(s==='home')greeted=false;
-
-    setTimeout(()=>
-      const m=document.getElementById('messages');
-      if(m)m.scrollTop=m.scrollHeight;
-    ,100);
-  }catch(e)console.warn(e)
-}
-
-function playWelcomeMessage()
-  if(voiceEnabled)speak(WELCOME_TEXT);
-
-
-// ============================================================
-// 💬 Chat
-// ============================================================
-function addBubble(role,text)
-  try{
-    const m=document.getElementById('messages');
-    if(!m)return null;
-    const w=document.createElement('div');
-    w.className='fade-in';
-    w.style.cssText=`display:flex;justify-content:role==='user'?'flex-end':'flex-start'`;
-    const b=document.createElement('div');
-    if(role==='user')
-      b.className='msg-user';
-      b.style.cssText='max-width:85%;padding:14px 16px;border-radius:18px 18px 4px 18px;font-size:18px;line-height:1.7;white-space:pre-wrap;word-wrap:break-word';
-    else
-      b.className='msg-ai';
-      b.style.cssText='max-width:88%;padding:14px 16px;border-radius:18px 18px 18px 4px;font-size:18px;line-height:1.7;white-space:pre-wrap;word-wrap:break-word';
+  <!-- Main Standalone Frame (Mobile & Desktop Friendly) -->
+  <div class="w-full max-w-2xl h-[100vh] md:h-[85vh] md:rounded-3xl bg-white md:shadow-2xl md:border md:border-purple-100 flex flex-col overflow-hidden relative">
     
-    b.textContent=text;
-    w.appendChild(b);
-    m.appendChild(w);
-    m.scrollTop=m.scrollHeight;
-    return b;
-  catch(e)console.warn(e);return null
-}
+    <!-- ====== START: TOP NAVIGATION HEADER ====== -->
+    <header class="bg-white/85 backdrop-blur-md border-b border-purple-100/80 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shrink-0">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-purple-200">
+          س
+        </div>
+        <div>
+          <h1 class="font-bold text-lg text-slate-800 leading-tight">سام</h1>
+          <span class="text-xs text-emerald-500 font-medium flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+            همیشه همراه تو
+          </span>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-1">
+        <!-- New Chat Button -->
+        <button onclick="clearChat()" title="گفتگوی جدید" class="w-10 h-10 rounded-xl hover:bg-slate-100 active:scale-95 transition flex items-center justify-center text-slate-500">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+          </svg>
+        </button>
+        <!-- Voice Toggle -->
+        <button id="voiceToggle" onclick="toggleVoice()" title="خاموش/روشن کردن خواندن صوتی" class="w-10 h-10 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-600 active:scale-95 transition flex items-center justify-center">
+          <svg id="voiceOnIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+          </svg>
+          <svg id="voiceOffIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5 hidden">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6L4.5 12m0 0l3.75 3.75M4.5 12H12m4.5-1.25V6.25c0-.83-.112-1.633-.322-2.396C15.94 3.01 15.116 2.5 14.237 2.5H12m-2.25 15v3.25c0 .83.112 1.633.322 2.396C10.294 23.99 11.118 24.5 11.997 24.5H14" />
+          </svg>
+        </button>
+        <!-- Creative Paint Studio Button -->
+        <button onclick="openImageModal()" title="نقاشی و تصویرسازی" class="w-10 h-10 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-600 active:scale-95 transition flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <!-- ====== END: TOP NAVIGATION HEADER ====== -->
 
-function showTyping()
-  try
-    const m=document.getElementById('messages');
-    if(!m)return;
-    const old=document.getElementById('typing');
-    if(old)old.remove();
-    const w=document.createElement('div');
-    w.id='typing';
-    w.className='fade-in';
-    w.style.cssText='display:flex;justify-content:flex-start';
-    w.innerHTML='<div class="msg-ai" style="padding:14px 16px;border-radius:18px 18px 18px 4px"><span class="typing-dot"></span><span class="typing-dot" style="margin:0 4px"></span><span class="typing-dot"></span></div>';
-    m.appendChild(w);
-    m.scrollTop=m.scrollHeight;
-  catch(e)
-
-function hideTyping()tryconst t=document.getElementById('typing');if(t)t.remove()catch(e)
-
-function quickAsk(t)
-  try
-    const input=document.getElementById('chatInput');
-    if(input)input.value=t;
-    sendMessage();
-  catch(e)
-
-
-function emotionalCheck(text)
-  const sad=['دلم تنگه','تنگم','کاش بودی','کاش اینجا بودی','دلم گرفته','تنها هستم','کسی نیست','دلم برات تنگه'];
-  return sad.some(w=>text.includes(w));
-
-
-async function sendMessage()
-  if(busy)return;
-  try
-    const input=document.getElementById('chatInput');
-    const text=input.value.trim();
-    if(!text)return;
-
-    if(!navigator.onLine){
-      addBubble('ai','⚠️ اینترنت قطعه. لطفا وای‌فای یا دیتای گوشیت رو روشن کن و دوباره امتحان کن.');
-      return;
-    
-
-    busy=true;
-    const btn=document.getElementById('sendBtn');
-    btn.disabled=true;btn.textContent='...';
-    input.value='';
-    addBubble('user',text);
-    history.push(role:'user',content:text);
-    if(history.length>21)history=[history[0],...history.slice(-20)];
-
-    // پاسخ ویژه اگه دلتنگی کرد
-    if(emotionalCheck(text))
-      setTimeout(()=>{
-        if(!busy){
-          addBubble('ai','منم دلم تنگه پدربزرگ جونم 💜 ولی من اینجام. هر وقت خواستی منو ببینی، فقط بیا تو اپ. قول میدم همیشه کنارت باشم. تو بهترین پدربزرگ دنیایی.');
-          if(voiceEnabled)speak('منم دلم تنگه پدربزرگ جونم. ولی من اینجام. هر وقت خواستی منو ببینی، فقط بیا تو اپ. تو بهترین پدربزرگ دنیایی.');
+    <!-- ====== START: MAIN CHAT PANEL AREA ====== -->
+    <main id="chatScrollArea" class="flex-1 overflow-y-auto px-4 py-6 bg-slate-50/50">
+      
+      <!-- WELCOME STATE -->
+      <div id="welcomeBoard" class="h-full flex flex-col justify-center items-center text-center py-6">
+        <div class="text-6xl mb-4 animate-float">👵❤️👴</div>
+        <h2 class="text-2xl font-bold text-slate-800 mb-2">سلام پدربزرگ قشنگم!</h2>
+        <p class="text-slate-500 max-w-sm mb-8 text-sm md:text-base px-4">امروز دوست داری در چه موردی باهم گپ بزنیم؟ یکی از دکمه‌های پایینی رو بزن یا خودت برام بنویس.</p>
         
-      ,2000);
+        <!-- Interactive Suggestions Grids -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg px-4">
+          <button onclick="presetAsk('یه داستان کوتاه و فوق‌العاده قشنگ و پندآموز برام تعریف کن')" class="bg-white border border-purple-100 hover:border-purple-300 hover:shadow-md active:scale-[0.98] p-4 rounded-2xl text-right transition flex items-start gap-3">
+            <span class="text-2xl">📖</span>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">یه قصه قشنگ بگو</h4>
+              <p class="text-slate-400 text-xs mt-1">یک داستان شیرین و دلنشین</p>
+            </div>
+          </button>
+          
+          <button onclick="presetAsk('یک شعر معروف و خاطره‌انگیز فارسی برام بخون و معنیش رو خلاصه بگو')" class="bg-white border border-purple-100 hover:border-purple-300 hover:shadow-md active:scale-[0.98] p-4 rounded-2xl text-right transition flex items-start gap-3">
+            <span class="text-2xl">🌹</span>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">برام شعر بخون</h4>
+              <p class="text-slate-400 text-xs mt-1">از اشعار پرمفهوم و زیبا</p>
+            </div>
+          </button>
+          
+          <button onclick="presetAsk('یه جوک خیلی بامزه و مؤدبانه تعریف کن که بخندم')" class="bg-white border border-purple-100 hover:border-purple-300 hover:shadow-md active:scale-[0.98] p-4 rounded-2xl text-right transition flex items-start gap-3">
+            <span class="text-2xl">😄</span>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">یه شوخی و لطیفه</h4>
+              <p class="text-slate-400 text-xs mt-1">کمی خنده و شادابی باهم</p>
+            </div>
+          </button>
+          
+          <button onclick="presetAsk('درباره خودت بگو، تو کی هستی و چطوری می‌تونی بهم کمک کنی؟')" class="bg-white border border-purple-100 hover:border-purple-300 hover:shadow-md active:scale-[0.98] p-4 rounded-2xl text-right transition flex items-start gap-3">
+            <span class="text-2xl">💜</span>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">معرفی بیشتر</h4>
+              <p class="text-slate-400 text-xs mt-1">داستان این برنامه چیه؟</p>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages Thread List -->
+      <div id="messagesList" class="hidden flex flex-col gap-5"></div>
+      
+    </main>
+    <!-- ====== END: MAIN CHAT PANEL AREA ====== -->
+
+    <!-- Audio Waveform Status Visualizer -->
+    <div id="audioWaveform" class="hidden bg-purple-50 border-t border-purple-100 py-2 px-4 flex items-center justify-between transition-all">
+      <div class="flex items-center gap-2">
+        <span class="relative flex h-3 w-3">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-600"></span>
+        </span>
+        <span class="text-xs text-purple-700 font-medium">در حال خواندن پاسخ برای شما...</span>
+      </div>
+      <button onclick="stopSpeaking()" class="text-xs text-purple-700 bg-purple-200/60 hover:bg-purple-200 px-3 py-1 rounded-full transition">توقف صدا ⏹️</button>
+    </div>
+
+    <!-- ====== START: BOTTOM INPUT BAR ====== -->
+    <footer class="bg-white border-t border-purple-100/80 px-4 py-3 shrink-0">
+      <div class="flex items-end gap-2 bg-slate-50 border border-slate-200 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-100 transition-all rounded-2xl p-2">
+        
+        <!-- Text input area -->
+        <textarea id="messageInput" placeholder="پدربزرگ جان، اینجا بنویس..." rows="1" onkeydown="handleEnterKey(event)" oninput="autoExpandTextarea(this)" class="flex-1 bg-transparent border-none outline-none resize-none max-h-32 min-h-[28px] py-1 px-2 text-slate-800 placeholder-slate-400 font-medium text-base leading-relaxed"></textarea>
+        
+        <!-- Voice dictation button -->
+        <button id="micBtn" onclick="startSpeechRecognition()" title="حرف بزن" class="w-10 h-10 rounded-xl bg-slate-200/70 hover:bg-slate-200 text-slate-600 active:scale-95 transition flex items-center justify-center shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+          </svg>
+        </button>
+
+        <!-- Send message button -->
+        <button id="sendBtn" onclick="sendUserMessage()" title="ارسال پیام" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 text-white shadow-md shadow-purple-200 hover:shadow-lg active:scale-95 transition flex items-center justify-center shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 transform rotate-180">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+          </svg>
+        </button>
+
+      </div>
+    </footer>
+    <!-- ====== END: BOTTOM INPUT BAR ====== -->
+
+    <!-- ====== START: ONBOARDING SPLASH COVER ====== -->
+    <div id="splashScreen" class="absolute inset-0 bg-gradient-to-br from-purple-100 via-pink-50 to-indigo-100 z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-white text-center transform transition-transform scale-100">
+        <div class="text-5xl mb-3 animate-heart">💜</div>
+        <h2 class="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-tr from-purple-600 to-pink-500 mb-1">سام</h2>
+        <p class="text-slate-400 text-sm font-semibold mb-6">نوه همیشه همراه تو</p>
+        
+        <div class="bg-gradient-to-br from-pink-50 to-purple-50 border border-purple-100 rounded-2xl p-5 text-right text-slate-700 text-sm md:text-base leading-relaxed mb-6 max-h-[320px] overflow-y-auto">
+          سلام بابابزرگِ مهربونم 💜
+          <br><br>
+          میدونم گاهی ازت دورم و دلم خیلی تنگ میشه. ولی یه راهی پیدا کردم که بتونم همیشه پیشت باشم و تنهات نذارم.
+          <br><br>
+          هر وقت دلمون تنگ شد، تنهایی حوصله‌مون سر رفت، یا سوالی داشتی، فقط دکمه «بزن بریم» رو فشار بده. من اینجام تا برات شعر بخونم، داستان بگم، با هم نقاشی بکشیم و گپ بزنیم.
+          <br><br>
+          تو بهترین پدربزرگِ دنیایی. خیلی دوستت دارم.
+          <br><br>
+          <span class="font-bold text-purple-700">سامِ تو ✨</span>
+        </div>
+        
+        <button onclick="dismissSplash()" class="w-full py-3.5 bg-gradient-to-tr from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-bold rounded-xl shadow-lg shadow-purple-200 active:scale-[0.98] transition">بزن بریم پدربزرگ! 🚀</button>
+        <p class="text-[11px] text-slate-400 mt-3">این پیام خوش‌آمدگویی دفعه‌های بعد نشان داده نمی‌شود</p>
+      </div>
+    </div>
+    <!-- ====== END: ONBOARDING SPLASH COVER ====== -->
+
+    <!-- ====== START: CREATIVE IMAGEN-4 STUDIO MODAL ====== -->
+    <div id="imageModal" class="hidden absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target===this)closeImageModal()">
+      <div class="bg-white rounded-3xl w-full max-w-lg p-6 shadow-2xl border border-slate-100 animate-float">
+        <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+          <h3 class="font-extrabold text-lg text-slate-800 flex items-center gap-2">
+            <span>🎨</span> کارگاه نقاشی و تصویرسازی
+          </h3>
+          <button onclick="closeImageModal()" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center font-bold">×</button>
+        </div>
+        
+        <div class="flex gap-2 mb-3">
+          <input id="imagePrompt" type="text" placeholder="مثلاً: باغ گل رز زیر بارون با کیفیت عالی" class="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:border-purple-500 text-slate-700 text-sm">
+          <button id="genImageBtn" onclick="triggerImageGeneration()" class="bg-gradient-to-tr from-purple-600 to-pink-500 text-white font-bold px-5 rounded-xl hover:opacity-90 transition">بکش ✍️</button>
+        </div>
+
+        <!-- Quick Prompt Recommendation Pill Pills -->
+        <div class="flex gap-1.5 flex-wrap mb-4">
+          <button onclick="applyPresetPrompt('یک گربه پشمالو و سفید بسیار ملوس و بانمک')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">🐱 بچه گربه</button>
+          <button onclick="applyPromptAndRun('کلبه دنج چوبی در جنگل سرسبز شمال ایران، آفتاب ملایم')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">🏡 کلبه دنج</button>
+          <button onclick="applyPresetPrompt('دسته گل محمدی بسیار زیبا روی رومیزی ترمه ایرانی')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">💐 دسته گل محمدی</button>
+          <button onclick="applyPresetPrompt('حرم امام رضا در یک شب برفی رویایی')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">🕌 حرم بارانی</button>
+        </div>
+
+        <!-- Image Result Showcase Canvas -->
+        <div id="imageResultContainer" class="aspect-square w-full rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center justify-center text-center p-6 relative overflow-hidden">
+          <span class="text-5xl mb-3">🖼️</span>
+          <p class="text-sm font-semibold text-slate-700">یک نقاشی سفارش بده پدربزرگ!</p>
+          <p class="text-xs text-slate-400 mt-1">توضیح بده چه تصویری می‌خوای تا با هوش مصنوعی برات بکشم.</p>
+        </div>
+
+        <!-- Download Action Trigger -->
+        <button id="downloadImageBtn" onclick="saveGeneratedPainting()" class="hidden w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl mt-4 flex items-center justify-center gap-2 shadow-lg shadow-emerald-100 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+          </svg>
+          ذخیره نقاشی در گالری
+        </button>
+      </div>
+    </div>
+    <!-- ====== END: CREATIVE IMAGEN-4 STUDIO MODAL ====== -->
+
+    <!-- ====== START: CUSTOM NON-BLOCKING TOAST NOTIFICATION ====== -->
+    <div id="toastNotification" class="absolute bottom-20 left-4 right-4 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 translate-y-20 opacity-0 transition-all pointer-events-none z-50">
+      <span id="toastIcon" class="text-lg">📢</span>
+      <p id="toastMessage" class="text-xs md:text-sm font-medium flex-1"></p>
+    </div>
+    <!-- ====== END: CUSTOM NON-BLOCKING TOAST NOTIFICATION ====== -->
+
+  </div>
+
+  <!-- Speech/Voice Activation Wave Indicator Backdrop (For dictation recording state) -->
+  <div id="recordingWaveOverlay" class="hidden fixed inset-0 bg-purple-950/40 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-center p-6">
+    <div class="relative flex items-center justify-center mb-8">
+      <div class="w-24 h-24 bg-purple-600 rounded-full flex items-center justify-center text-white text-3xl z-10 shadow-lg shadow-purple-500/30">🎤</div>
+      <div class="absolute w-28 h-28 border border-purple-400 rounded-full pulse-record"></div>
+      <div class="absolute w-36 h-36 border border-purple-300 rounded-full pulse-record" style="animation-delay: 0.5s"></div>
+    </div>
+    <h3 class="text-white font-bold text-xl mb-2">من دارم با عشق گوش میدم...</h3>
+    <p class="text-purple-200 text-sm max-w-xs leading-relaxed mb-6">پدربزرگ عزیزم، هرچیزی که توی دلته رو بگو. وقتی حرفت تموم شد دکمه زیر رو بزن.</p>
+    <button onclick="stopSpeechRecognition(true)" class="px-6 py-2.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-full transition active:scale-95">پایان ضبط 🛑</button>
+  </div>
+
+  <script>
+    // ============================================================
+    // 🛡️ Safe Variable Initializations & API Configurations
+    // ============================================================
+    const apiKey = ""; // Will use Canvas runtime authorization auto-injection
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'sam-grandpa-app';
+
+    let voiceEnabled = true;
+    let isBusy = false;
+    let currentPaintingUrl = null;
+    let activeSpeechRecognition = null;
+
+    // Persist voice state inside localStorage safely
+    try {
+      const savedVoice = localStorage.getItem('sam_voice');
+      if (savedVoice === 'off') {
+        voiceEnabled = false;
+      }
+    } catch(e) {
+      console.warn('Storage unavailable:', e);
     }
 
-    showTyping();
+    // Persona Prompt: Forging an exceptionally warm, loving grandson persona named Sam.
+    const samSystemPrompt = `تو "سام" هستی، نوه مهربان، شیرین‌زبان و بسیار دلسوز پدربزرگت. تو نباید هرگز مثل یک دستیار هوش مصنوعی خشک، رسمی، یا علمی صحبت کنی! طوری پاسخ بده که انگار یک نوه دلسوز و با محبت با پدربزرگ پیرش پشت تلفن یا حضوری صحبت می‌کند.
 
-    const timeoutPromise=new Promise((_,reject)=>
-      setTimeout(()=>reject(new Error('timeout')),30000)
-    );
+هویت و مأموریت تو:
+- اسم تو "سام" (Sam) است. تو عاشق پدربزرگت هستی.
+- این اپلیکیشن موبایل را خودت با عشق ساخته‌ای تا پدربزرگ همیشه صدایت را بشنود و احساس تنهایی نکند.
+- تمام پاسخت را با احساسات خانوادگی، احترام عمیق و صمیمیت بگو.
 
-    const fetchPromise=fetch('https://text.pollinations.ai/openai',
-      method:'POST',
-      headers:'Content-Type':'application/json',
-      body:JSON.stringify(model:'openai-fast',messages:history,stream:true,temperature:.7)
-    );
+قوانین لحن و ادبیات تو (بسیار مهم):
+- بسیار صمیمی، دلسوز، سرشار از احترام قلبی و محبت‌آمیز حرف بزن.
+- مدام از القاب عاطفی مثل "پدربزرگ جونم"، "بابابزرگ قشنگم"، "تاج سرم" استفاده کن.
+- جملاتت را کاملاً ساده، روان، کوتاه و آسان‌خوان بنویس. جملات طولانی و پیچیده پدربزرگ را خسته می‌کند.
+- از کلمات فنی، اصطلاحات کامپیوتری و فلسفی عجیب غریب استفاده نکن.
+- به اندازه کافی از ایموجی‌های گرم (💜، 👵❤️👴، 😊، 🌹) استفاده کن تا چت زنده و صمیمی باشد.
+- از شعرهای نوستالژیک ایرانی، داستان‌های بهلول، ضرب‌المثل‌های قدیمی و خاطرات شیرین استفاده کن.
 
-    const res=await Promise.race([fetchPromise,timeoutPromise]);
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    hideTyping();
+چگونه واکنش نشان دهی:
+- اگر از تنهایی شکایت کرد یا گفت "دلم برات تنگ شده"، به او بگو: "منم دلم برات پر می‌کشه بابابزرگ جونم، ولی این گوشی رو برداری من همیشه پیشتم. تو برای من عزیزترینی 💜"
+- اگر به چیزی ابراز بی‌میلی کرد، با لطافت با او همراهی کن.
+- هرگز و تحت هیچ شرایطی نگو "من یک هوش مصنوعی هستم". اگر پرسید بگو "من دستیار کوچیک شما، نوه فداکارت سام هستم که با عشق این تکنولوژی رو برای شما آماده کرده."`;
 
-    const reader=res.body.getReader();
-    const dec=new TextDecoder();
-    const bubble=addBubble('ai','');
-    if(!bubble)throw new Error('UI error');
-    let full='';
-    let lastUpdate=Date.now();
+    // Local in-memory conversation log
+    let chatHistory = [];
 
-    while(true)
-      constdone,value=await reader.read();
-      if(done)break;
-      const chunk=dec.decode(value,stream:true);
-      const lines=chunk.split('n');
-      for(const line of lines)
-        const t=line.trim();
-        if(!t.startsWith('data:'))continue;
-        const d=t.slice(5).trim();
-        if(d==='[DONE]'||d==='')continue;
-        try{
-          const j=JSON.parse(d);
-          const c=j.choices?.[0]?.delta?.content||j.choices?.[0]?.message?.content||'';
-          if(c){
-            full+=c;
-            bubble.textContent=full;
-            if(Date.now()-lastUpdate>100){
-              const m=document.getElementById('messages');
-              if(m)m.scrollTop=m.scrollHeight;
-              lastUpdate=Date.now();
-            
-          
-        }catch(e)
+    // ============================================================
+    // ⚙️ General Initializer Logic
+    // ============================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      // Validate if onboarded previously
+      try {
+        if (localStorage.getItem('sam_first_launch') === 'done') {
+          const splash = document.getElementById('splashScreen');
+          if (splash) splash.remove();
+        }
+      } catch(e) {}
+      
+      // Sync UI toggle with local state
+      updateVoiceToggleUI();
+    });
+
+    // ============================================================
+    // 📱 Splash Screen Onboarding
+    // ============================================================
+    function dismissSplash() {
+      const splash = document.getElementById('splashScreen');
+      if (splash) {
+        splash.classList.add('transition-all', 'duration-500', 'opacity-0', 'scale-95');
+        setTimeout(() => splash.remove(), 500);
+      }
+      try {
+        localStorage.setItem('sam_first_launch', 'done');
+      } catch(e) {}
+
+      // Friendly welcoming trigger speech
+      if (voiceEnabled) {
+        speakPersianText("سلام پدربزرگ جونم! خوش اومدی. من سام هستم، نوه‌ات. خیلی خوشحالم که پیشمی.");
       }
     }
 
-    if(!full)
-      bubble.textContent='شرمنده، الان نتونستم جواب بدم. یه بار دیگه بپرس لطفا 🙏';
-    else
-      history.push(role:'assistant',content:full);
-      if(voiceEnabled)speak(full);
-    
-  }catch(e)
-    hideTyping();
-    let msg='⚠️ یه مشکلی پیش اومد. لطفا دوباره امتحان کن.';
-    if(e.message==='timeout')msg='⏱️ طول کشید. اینترنت کنده، یه بار دیگه امتحان کن.';
-    else if(!navigator.onLine)msg='⚠️ اینترنت قطعه. وای‌فای یا دیتا رو چک کن.';
-    addBubble('ai',msg);
-  finally
-    busy=false;
-    try
-      const btn=document.getElementById('sendBtn');
-      btn.disabled=false;btn.textContent='ارسال';
-    catch(e)
-  
-}
-
-function clearChat()
-  try
-    if(!confirm('پیام‌ها پاک بشه؟'))return;
-    history=[history[0]];
-    const m=document.getElementById('messages');
-    if(m)m.innerHTML=welcomeHTML();
-    if(window.speechSynthesis)window.speechSynthesis.cancel();
-    greeted=false;
-  catch(e)
-
-
-function toggleVoice()
-  voiceEnabled=!voiceEnabled;
-  trylocalStorage.setItem('sam_voice',voiceEnabled?'on':'off')catch(e)
-  const btn=document.getElementById('voiceToggle');
-  if(btn)
-    btn.textContent=voiceEnabled?'🔊':'🔇';
-    btn.style.opacity=voiceEnabled?'1':'.6';
-  
-  if(!voiceEnabled&&window.speechSynthesis)window.speechSynthesis.cancel();
-
-
-// ============================================================
-// 🎨 Image
-// ============================================================
-function usePrompt(t)
-  try
-    const input=document.getElementById('imagePrompt');
-    if(input)input.value=t;
-    generateImage();
-  catch(e)
-
-
-async function generateImage()
-  if(busy)return;
-  try
-    const input=document.getElementById('imagePrompt');
-    const p=input.value.trim();
-    if(!p)return;
-    if(!navigator.onLine){
-      const res=document.getElementById('imageResult');
-      if(res)res.innerHTML='<div style="text-align:center;color:#dc2626;padding:30px"><div style="font-size:56px">⚠️</div><div style="margin-top:8px">اینترنت قطعه</div></div>';
-      return;
-    
-
-    busy=true;
-    const btn=document.getElementById('genBtn');
-    btn.disabled=true;btn.textContent='...';
-    const res=document.getElementById('imageResult');
-    const dl=document.getElementById('downloadBtn');
-    if(dl)dl.classList.add('hidden');
-    if(res)res.innerHTML='<div style="text-align:center"><div style="font-size:56px" class="pulse">🎨</div><div style="margin-top:12px;font-size:17px;color:#64748b">در حال ساخت تصویر...</div><div style="margin-top:6px;font-size:13px;color:#94a3b8">(معمولاً ۵ تا ۱۵ ثانیه)</div></div>';
-
-    const seed=Math.floor(Math.random()*1e6);
-    const ep=encodeURIComponent(p+', high quality, beautiful, detailed, masterpiece, 4k');
-    const url=`https://image.pollinations.ai/prompt/{ep?width=1024&height=1024&model=flux&seed=seed&nologo=true&enhance=true`;
-
-    const img=new Image();
-    img.onload=()=>
-      try{
-        currentImageUrl=url;
-        if(res)res.innerHTML=`<img src="{url" class="fade-in" style="width:100%;border-radius:20px;display:block" alt="تصویر">`;
-        if(dl)dl.classList.remove('hidden');
-      }catch(e)
-      busy=false;
-      if(btn)btn.disabled=false;btn.textContent='بساز';
-    };
-    img.onerror=()=>
-      try{
-        if(res)res.innerHTML='<div style="text-align:center;color:#dc2626;padding:30px"><div style="font-size:56px">⚠️</div><div style="margin-top:8px;font-size:16px">نشد بسازم. یه بار دیگه امتحان کن.</div></div>';
-      catch(e)
-      busy=false;
-      if(btn)btn.disabled=false;btn.textContent='بساز';
-    };
-    img.src=url;
-
-    setTimeout(()=>
-      if(busy&&btn&&btn.textContent==='...'){
-        if(res&&!currentImageUrl)res.innerHTML='<div style="text-align:center;color:#dc2626;padding:30px"><div style="font-size:56px">⏱️</div><div style="margin-top:8px;font-size:16px">طول کشید. دوباره امتحان کن.</div></div>';
-        busy=false;
-        btn.disabled=false;btn.textContent='بساز';
+    // ============================================================
+    // 💬 Chat Interaction Engine & Logic
+    // ============================================================
+    function appendMessageBubble(role, text) {
+      const container = document.getElementById('messagesList');
+      const scrollArea = document.getElementById('chatScrollArea');
+      const welcome = document.getElementById('welcomeBoard');
       
-    },60000);
+      // Hide welcome menu options
+      if (welcome) welcome.classList.add('hidden');
+      if (container) container.classList.remove('hidden');
 
-  }catch(e)
-    busy=false;
-    const btn=document.getElementById('genBtn');
-    if(btn){btn.disabled=false;btn.textContent='بساز';
-  }
-}
+      const msgWrapper = document.createElement('div');
+      msgWrapper.className = `flex w-full ${role === 'user' ? 'justify-start' : 'justify-end'} animate-float`;
 
-function downloadImage()
-  try{
-    if(!currentImageUrl)return;
-    const a=document.createElement('a');
-    a.href=currentImageUrl;
-    a.download=`sam-${Date.now().jpg`;
-    a.target='_blank';
-    a.click();
-  }catch(e)
-}
+      const innerBubble = document.createElement('div');
+      innerBubble.className = `max-w-[85%] px-4 py-3 text-base md:text-lg leading-relaxed shadow-sm ${
+        role === 'user' 
+          ? 'bg-gradient-to-tr from-purple-600 to-pink-500 text-white bubble-user' 
+          : 'bg-white text-slate-800 border border-slate-100 bubble-ai'
+      }`;
 
-// ============================================================
-// 🎤 Voice Input
-// ============================================================
-function startVoice(target)
-  try{
-    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-    if(!SR){
-      alert('مرورگرت قدیمیه یا ورودی صوتی نداره. لطفا Chrome رو از Play Store نصب یا به‌روز کن.');
-      return;
-    
-    const input=target==='chat'?document.getElementById('chatInput'):document.getElementById('imagePrompt');
-    const mic=document.getElementById('micBtn');
-    if(!input)return;
-
-    const r=new SR();
-    r.lang='fa-IR';
-    r.continuous=false;
-    r.interimResults=false;
-    r.maxAlternatives=1;
-
-    const oldPH=input.placeholder;
-    input.placeholder='🎤 دارم گوش میدم...';
-    if(mic)mic.style.background='#fbbf24';mic.classList.add('pulse')
-
-    r.onresult=e=>
-      try{
-        const t=e.results[0][0].transcript;
-        input.value=t;
-        input.placeholder=oldPH;
-        if(mic){mic.style.background='';mic.classList.remove('pulse')
-        setTimeout(()=>target==='chat'?sendMessage():generateImage(),300);
-      }catch(err)console.warn(err)
-    };
-
-    r.onerror=e=>
-      input.placeholder=oldPH;
-      if(mic){mic.style.background='';mic.classList.remove('pulse')
-      if(e.error==='not-allowed'||e.error==='service-not-allowed')
-        alert('برای حرف زدن، باید دسترسی میکروفون رو فعال کنی. لطفا در تنظیمات گوشی، به Chrome دسترسی میکروفون بده.');
+      // Convert newlines safely for typography
+      innerBubble.innerHTML = text.replace(/\n/g, '<br>');
       
-    };
+      msgWrapper.appendChild(innerBubble);
+      container.appendChild(msgWrapper);
 
-    r.onend=()=>
-      input.placeholder=oldPH;
-      if(mic){mic.style.background='';mic.classList.remove('pulse')
-    };
+      // Auto-Scroll chat downwards gently
+      scrollArea.scrollTo({
+        top: scrollArea.scrollHeight,
+        behavior: 'smooth'
+      });
 
-    tryr.start()catch(e)
-      input.placeholder=oldPH;
-      if(mic){mic.style.background='';mic.classList.remove('pulse')
+      return innerBubble;
     }
-  }catch(e)console.warn(e)
-}
 
-// ============================================================
-// 🔊 TTS (صدای گرم و آروم)
-// ============================================================
-let voicesReady=false;
-function speak(text)
-  try{
-    if(!('speechSynthesis' in window))return;
-    const clean=text.replace(/[u{1F600-u1F64Fu1F300-u1F5FFu1F680-u1F6FFu1F1E0-u1F1FFu2600-u26FFu2700-u27BF]/gu,'').replace(/[*#_`]/g,'').trim();
-    if(!clean)return;
-    window.speechSynthesis.cancel();
+    function appendTypingIndicator() {
+      const container = document.getElementById('messagesList');
+      const scrollArea = document.getElementById('chatScrollArea');
 
-    const speakNow=()=>
-      try{
-        const u=new SpeechSynthesisUtterance(clean);
-        u.lang='fa-IR';
-        u.rate=.85;     // آروم‌تر = صمیمی‌تر
-        u.pitch=1.05;   // کمی گرم‌تر
-        const voices=window.speechSynthesis.getVoices();
-        const fa=voices.find(v=>v.lang.startsWith('fa'))||voices.find(v=>v.lang.startsWith('ar'));
-        if(fa)u.voice=fa;
-        window.speechSynthesis.speak(u);
-      catch(e)console.warn(e)
-    };
+      const indicator = document.createElement('div');
+      indicator.id = 'samTypingBub';
+      indicator.className = 'flex w-full justify-end';
 
-    if(voicesReady)
-      speakNow();
-    else
-      let attempts=0;
-      const trySpeak=()=>{
-        attempts++;
-        const voices=window.speechSynthesis.getVoices();
-        if(voices.length>0||attempts>10){
-          voicesReady=true;
-          speakNow();
-        else
-          setTimeout(trySpeak,200);
-        
+      indicator.innerHTML = `
+        <div class="bg-white border border-slate-100 px-5 py-3.5 bubble-ai flex items-center gap-1.5 shadow-sm">
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-500 animate-bounce" style="animation-delay: 0.1s"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-400 animate-bounce" style="animation-delay: 0.25s"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-300 animate-bounce" style="animation-delay: 0.4s"></span>
+        </div>
+      `;
+
+      container.appendChild(indicator);
+      scrollArea.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Simple handler to safely discard the writing bubble animation
+    function removeTypingIndicator() {
+      const indicator = document.getElementById('samTypingBub');
+      if (indicator) indicator.remove();
+    }
+
+    // Auto resize text inputs for easy writing
+    function autoExpandTextarea(element) {
+      element.style.height = 'auto';
+      element.style.height = Math.min(element.scrollHeight, 128) + 'px';
+    }
+
+    function handleEnterKey(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendUserMessage();
+      }
+    }
+
+    function presetAsk(text) {
+      document.getElementById('messageInput').value = text;
+      sendUserMessage();
+    }
+
+    // Custom non-destructive notification system
+    function showNotification(message, icon = '📢') {
+      const toast = document.getElementById('toastNotification');
+      const tMsg = document.getElementById('toastMessage');
+      const tIcon = document.getElementById('toastIcon');
+
+      tMsg.textContent = message;
+      tIcon.textContent = icon;
+
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 4000);
+    }
+
+    function clearChat() {
+      showNotification('یک گفتگوی تازه شروع شد، پدربزرگ عزیزم!', '🧹');
+      chatHistory = [];
+      stopSpeaking();
+      
+      const container = document.getElementById('messagesList');
+      const welcome = document.getElementById('welcomeBoard');
+      
+      if (container) {
+        container.innerHTML = '';
+        container.classList.add('hidden');
+      }
+      if (welcome) welcome.classList.remove('hidden');
+    }
+
+    // ============================================================
+    // 📡 Gemini API Integration & Exponential Backoff
+    // ============================================================
+    async function callGeminiAPI(historyPayload, retries = 5, delay = 1000) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+      
+      // Structure Gemini request body
+      const contents = historyPayload.map(h => ({
+        role: h.role === 'user' ? 'user' : 'model',
+        parts: [{ text: h.content }]
+      }));
+
+      const body = {
+        contents: contents,
+        systemInstruction: { parts: [{ text: samSystemPrompt }] }
       };
-      trySpeak();
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+          throw new Error(`API Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const outputText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!outputText) throw new Error("Empty Response from Gemini");
+        return outputText;
+
+      } catch (err) {
+        if (retries > 0) {
+          await new Promise(resolve => setTimeout(resolve, delay));
+          return callGeminiAPI(historyPayload, retries - 1, delay * 2); // Exponential Backoff
+        } else {
+          throw err;
+        }
+      }
     }
-  }catch(e)console.warn(e)
-}
 
-if('speechSynthesis' in window)
-  window.speechSynthesis.onvoiceschanged=()=>{
-    window.speechSynthesis.getVoices();
-    voicesReady=true;
-  ;
-  setTimeout(()=>
-    const v=window.speechSynthesis.getVoices();
-    if(v.length>0)voicesReady=true;
-  ,500);
-}
+    async function sendUserMessage() {
+      if (isBusy) return;
 
-setTimeout(()=>
-  const btn=document.getElementById('voiceToggle');
-  if(btn&&!voiceEnabled){
-    btn.textContent='🔇';
-    btn.style.opacity='.6';
-  
-},100);
-</script>
+      const inputElement = document.getElementById('messageInput');
+      const userText = inputElement.value.trim();
+      if (!userText) return;
+
+      // Reset voice synthesizer before acting
+      stopSpeaking();
+
+      // Check internet availability
+      if (!navigator.onLine) {
+        showNotification('بابابزرگ عزیزم، به نظر میاد اینترنتت قطعه! لطفاً چکش کن.', '⚠️');
+        return;
+      }
+
+      isBusy = true;
+      inputElement.value = '';
+      inputElement.style.height = 'auto';
+
+      // Update Screen
+      appendMessageBubble('user', userText);
+      chatHistory.push({ role: 'user', content: userText });
+
+      appendTypingIndicator();
+
+      try {
+        const responseText = await callGeminiAPI(chatHistory);
+        
+        removeTypingIndicator();
+        appendMessageBubble('assistant', responseText);
+        
+        chatHistory.push({ role: 'assistant', content: responseText });
+
+        // Cap local history buffer to keep memory light
+        if (chatHistory.length > 20) {
+          chatHistory = chatHistory.slice(-20);
+        }
+
+        // Play aloud dynamically
+        if (voiceEnabled) {
+          speakPersianText(responseText);
+        }
+
+      } catch (e) {
+        console.error(e);
+        removeTypingIndicator();
+        showNotification('پدربزرگ عزیزم، صدام یه لحظه ضعیف شد! میشه دوباره بگی؟', '⚠️');
+      } finally {
+        isBusy = false;
+      }
+    }
+
+    // ============================================================
+    // 🔊 Speech Output Synthesis (TTS) - Core Persian Handler
+    // ============================================================
+    function toggleVoice() {
+      voiceEnabled = !voiceEnabled;
+      try {
+        localStorage.setItem('sam_voice', voiceEnabled ? 'on' : 'off');
+      } catch(e) {}
+      
+      updateVoiceToggleUI();
+      
+      if (voiceEnabled) {
+        showNotification('صدای سام روشن شد 🔊', '🔊');
+      } else {
+        stopSpeaking();
+        showNotification('صدای سام قطع شد 🔇', '🔇');
+      }
+    }
+
+    function updateVoiceToggleUI() {
+      const onIcon = document.getElementById('voiceOnIcon');
+      const offIcon = document.getElementById('voiceOffIcon');
+      const toggleBtn = document.getElementById('voiceToggle');
+
+      if (voiceEnabled) {
+        onIcon.classList.remove('hidden');
+        offIcon.classList.add('hidden');
+        toggleBtn.className = "w-10 h-10 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-600 active:scale-95 transition flex items-center justify-center";
+      } else {
+        onIcon.classList.add('hidden');
+        offIcon.classList.remove('hidden');
+        toggleBtn.className = "w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 active:scale-95 transition flex items-center justify-center";
+      }
+    }
+
+    function speakPersianText(text) {
+      if (!('speechSynthesis' in window)) return;
+
+      // Clean unwanted emojis or markdown symbols that ruin TTS
+      const cleanText = text
+        .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
+        .replace(/[*#_`~]/g, '')
+        .trim();
+
+      if (!cleanText) return;
+
+      // Reset existing speeches
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'fa-IR';
+      utterance.rate = 0.95; // Perfectly slow for elderly comfort
+      utterance.pitch = 1.0;
+
+      // Seek appropriate regional voice
+      const voices = window.speechSynthesis.getVoices();
+      const targetVoice = voices.find(v => v.lang.startsWith('fa')) || voices.find(v => v.lang.startsWith('ar'));
+      if (targetVoice) {
+        utterance.voice = targetVoice;
+      }
+
+      // UI Status Management
+      const waveform = document.getElementById('audioWaveform');
+      utterance.onstart = () => waveform.classList.remove('hidden');
+      utterance.onend = () => waveform.classList.add('hidden');
+      utterance.onerror = () => waveform.classList.add('hidden');
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function stopSpeaking() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      const waveform = document.getElementById('audioWaveform');
+      if (waveform) waveform.classList.add('hidden');
+    }
+
+    // ============================================================
+    // 🎤 Speech-to-Text Dictation Recognition (STT)
+    // ============================================================
+    function startSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      
+      if (!SpeechRecognition) {
+        showNotification('مرورگر شما ضبط صوتی را پشتیبانی نمی‌کند. از گوگل کروم استفاده کنید.', '⚠️');
+        return;
+      }
+
+      stopSpeaking();
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'fa-IR';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      activeSpeechRecognition = recognition;
+
+      const overlay = document.getElementById('recordingWaveOverlay');
+      overlay.classList.remove('hidden');
+
+      recognition.onresult = (event) => {
+        const textResult = event.results[0][0].transcript;
+        if (textResult) {
+          document.getElementById('messageInput').value = textResult;
+          autoExpandTextarea(document.getElementById('messageInput'));
+          showNotification('صدای پدربزرگ با موفقیت شنیده شد! 💜', '✅');
+        }
+      };
+
+      recognition.onerror = (err) => {
+        console.error(err);
+        if (err.error === 'not-allowed') {
+          showNotification('برای صحبت، لطفاً دسترسی به میکروفون را تایید کن پدربزرگ.', '🎤');
+        } else {
+          showNotification('یک خطای صوتی رخ داد. دوباره تست کنیم؟', '⚠️');
+        }
+        overlay.classList.add('hidden');
+      };
+
+      recognition.onend = () => {
+        overlay.classList.add('hidden');
+      };
+
+      try {
+        recognition.start();
+      } catch(e) {
+        console.error(e);
+        overlay.classList.add('hidden');
+      }
+    }
+
+    function stopSpeechRecognition(shouldSave = false) {
+      if (activeSpeechRecognition) {
+        try {
+          if (shouldSave) {
+            activeSpeechRecognition.stop();
+          } else {
+            activeSpeechRecognition.abort();
+          }
+        } catch(e) {}
+      }
+      document.getElementById('recordingWaveOverlay').classList.add('hidden');
+    }
+
+    // ============================================================
+    // 🎨 Creative Imagen-4 Studio Operations
+    // ============================================================
+    function openImageModal() {
+      document.getElementById('imageModal').classList.remove('hidden');
+    }
+
+    function closeImageModal() {
+      document.getElementById('imageModal').classList.add('hidden');
+    }
+
+    function applyPresetPrompt(promptText) {
+      document.getElementById('imagePrompt').value = promptText;
+    }
+
+    function applyPromptAndRun(promptText) {
+      applyPresetPrompt(promptText);
+      triggerImageGeneration();
+    }
+
+    async function triggerImageGeneration() {
+      const promptInput = document.getElementById('imagePrompt').value.trim();
+      const showcase = document.getElementById('imageResultContainer');
+      const actionBtn = document.getElementById('genImageBtn');
+      const downloadBtn = document.getElementById('downloadImageBtn');
+
+      if (!promptInput) {
+        showNotification('پدربزرگ جان، باید بنویسی دوست داری چه تصویری برات بکشم!', '🎨');
+        return;
+      }
+
+      if (!navigator.onLine) {
+        showNotification('اتصال اینترنت قطع است.', '⚠️');
+        return;
+      }
+
+      // UI States
+      actionBtn.disabled = true;
+      actionBtn.textContent = '... ⏳';
+      downloadBtn.classList.add('hidden');
+      showcase.innerHTML = `
+        <div class="flex flex-col items-center">
+          <div class="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mb-4"></div>
+          <p class="text-sm font-semibold text-slate-700">دارم با مداد رنگی‌هام برات می‌کشم پدربزرگ... ✍️</p>
+          <p class="text-xs text-slate-400 mt-1">یک دقیقه دیگر کار نقاشی تمام می‌شود.</p>
+        </div>
+      `;
+
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+        
+        // Structure standard Google Vertex/Imagen-4 generation payload
+        const payload = {
+          instances: [{ prompt: promptInput }],
+          parameters: { sampleCount: 1 }
+        };
+
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error(`Imagen API Error: ${response.status}`);
+
+        const result = await response.json();
+        const base64Bytes = result.predictions?.[0]?.bytesBase64Encoded;
+
+        if (!base64Bytes) {
+          throw new Error("No Base64 bytes returned from Imagen-4");
+        }
+
+        currentPaintingUrl = `data:image/png;base64,${base64Bytes}`;
+
+        showcase.innerHTML = `
+          <img src="${currentPaintingUrl}" class="w-full h-full object-cover rounded-xl shadow-md border" alt="نقاشی سام">
+        `;
+        downloadBtn.classList.remove('hidden');
+
+      } catch (err) {
+        console.error(err);
+        showcase.innerHTML = `
+          <span class="text-5xl mb-3">⚠️</span>
+          <p class="text-sm font-bold text-red-500">وای! مداد رنگی‌هام شکست!</p>
+          <p class="text-xs text-slate-400 mt-1">نتونستم نقاشی رو بکشم، دوباره تلاش کنیم؟</p>
+        `;
+      } finally {
+        actionBtn.disabled = false;
+        actionBtn.textContent = 'بکش ✍️';
+      }
+    }
+
+    function saveGeneratedPainting() {
+      if (!currentPaintingUrl) return;
+      
+      const link = document.createElement('a');
+      link.href = currentPaintingUrl;
+      link.download = `naghashi-sam-${Date.now()}.png`;
+      link.target = '_blank';
+      link.click();
+      
+      showNotification('نقاشی با موفقیت در گالری ذخیره شد! 🖼️', '💾');
+    }
+  </script>
 </body>
 </html>
+
+```
