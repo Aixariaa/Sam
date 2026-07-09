@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
     <title>سام - دستیار صمیمی پدربزرگ</title>
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#9d7bb0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -20,6 +21,7 @@
         .btn-soft-purple:hover { background-color: #8a6699; transform: translateY(-2px); }
         .chat-bubble-sam { background: #f3e8ff; border-radius: 20px 20px 0 20px; }
         .chat-bubble-grandpa { background: #e0f2fe; border-radius: 20px 20px 20px 0; }
+        .chat-bubble-error { background: #fee2e2; border-radius: 20px 20px 20px 0; color: #991b1b; }
         .touch-target { min-height: 64px; min-width: 64px; }
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -28,6 +30,8 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        
+        .disabled-btn { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body class="text-gray-800 pb-10">
@@ -37,7 +41,7 @@
         <div class="glass-card max-w-md w-full p-8 rounded-3xl text-center fade-in">
             <div class="text-6xl mb-4">💜</div>
             <h1 class="text-3xl font-bold text-purple-800 mb-4">سلام بابابزرگِ مهربونم</h1>
-            <p class="text-lg leading-relaxed text-gray-600 mb-6">من سام هستم، همیشه پیشت می‌مونم تا با هم گپ بزنیم، شعر بخونم و خاطرات قشنگ بسازیم. تو بهترین پدربزرگ دنیایی!</p>
+            <p class="text-lg leading-relaxed text-gray-600 mb-6">من سام هستم، همیشه پیشت می‌مونم تا با هم گپ بزنیم، شعر بخونم و خاطرات قشنگمون رو به یاد بیاریم. تو رو خیلی دوست دارم! 💜</p>
             <button onclick="closeWelcome()" class="btn-soft-purple text-white px-8 py-4 rounded-full text-xl font-bold w-full shadow-lg">بزن بریم پدربزرگ! 🚀</button>
         </div>
     </div>
@@ -92,21 +96,24 @@
         <!-- Input Area -->
         <div class="flex flex-col items-center gap-4">
             <div id="voice-status" class="hidden text-red-500 font-bold animate-pulse">🎤 در حال گوش دادن...</div>
+            <div id="voice-warning" class="hidden text-amber-600 font-semibold text-sm bg-amber-50 px-4 py-2 rounded-lg">
+                ⚠️ مرورگر شما از صوت پشتیبانی نمی‌کند. لطفا متن بنویسید.
+            </div>
             <div class="flex gap-4 w-full max-w-md">
-                <button id="mic-btn" onclick="toggleListening()" class="touch-target w-20 h-20 bg-purple-600 text-white rounded-full shadow-xl flex items-center justify-center text-3xl hover:bg-purple-700 active:scale-90 transition-all">🎤</button>
+                <button id="mic-btn" onclick="toggleListening()" class="touch-target w-20 h-20 bg-purple-600 text-white rounded-full shadow-xl flex items-center justify-center text-3xl hover:bg-purple-700 transition-colors" title="فشار دهید و صحبت کنید">🎤</button>
                 <div class="flex-1 flex gap-2">
-                    <input id="text-input" type="text" placeholder="اینجا بنویسید..." class="w-full p-4 rounded-full border-2 border-purple-100 focus:border-purple-400 outline-none text-lg">
-                    <button onclick="handleTextInput()" class="bg-purple-800 text-white px-6 rounded-full font-bold">ارسال</button>
+                    <input id="text-input" type="text" placeholder="اینجا بنویسید..." class="w-full p-4 rounded-full border-2 border-purple-100 focus:border-purple-400 outline-none text-right" onkeypress="if(event.key==='Enter') handleTextInput();">
+                    <button id="send-btn" onclick="handleTextInput()" class="bg-purple-800 text-white px-6 rounded-full font-bold hover:bg-purple-900 transition-colors">ارسال</button>
                 </div>
             </div>
-            <button id="stop-voice" onclick="stopSpeaking()" class="hidden text-gray-500 underline text-sm">توقف صدا ⏹️</button>
+            <button id="stop-voice" onclick="stopSpeaking()" class="hidden text-gray-500 underline text-sm hover:text-gray-700">توقف صدا ⏹️</button>
         </div>
     </main>
 
     <!-- Art Studio -->
     <div id="art-studio" class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm p-4 flex items-center justify-center">
         <div class="glass-card w-full max-w-2xl rounded-3xl p-6 relative">
-            <button onclick="toggleArtStudio()" class="absolute top-4 left-4 text-2xl">✕</button>
+            <button onclick="toggleArtStudio()" class="absolute top-4 left-4 text-2xl hover:opacity-70">✕</button>
             <h3 class="text-2xl font-bold text-purple-900 mb-4 text-center">🎨 کارگاه نقاشی سام</h3>
             <div class="flex flex-wrap justify-center gap-3 mb-6">
                 <button onclick="setPrompt('بچه گربه ناز')" class="bg-white border px-4 py-2 rounded-full hover:bg-purple-100">🐱 بچه گربه</button>
@@ -115,142 +122,318 @@
                 <button onclick="setPrompt('حرم در زمستان و برف')" class="bg-white border px-4 py-2 rounded-full hover:bg-purple-100">🕌 حرم برفی</button>
             </div>
             <div class="flex gap-2 mb-6">
-                <input id="art-input" type="text" placeholder="بگو چه تصویری برات بکشم..." class="flex-1 p-4 rounded-2xl border-2 border-purple-100 outline-none">
-                <button onclick="generateImage()" class="bg-purple-600 text-white px-6 rounded-2xl font-bold hover:bg-purple-700">بکش ✍️</button>
+                <input id="art-input" type="text" placeholder="بگو چه تصویری برات بکشم..." class="flex-1 p-4 rounded-2xl border-2 border-purple-100 outline-none text-right">
+                <button id="art-generate-btn" onclick="generateImage()" class="bg-purple-600 text-white px-6 rounded-2xl font-bold hover:bg-purple-700 transition-colors">بکش ✍️</button>
             </div>
             <div id="art-result" class="w-full aspect-square bg-gray-100 rounded-2xl overflow-hidden flex items-center justify-center text-gray-400 relative">تصویر اینجا ظاهر می‌شود...</div>
-            <button id="save-art" class="hidden mt-4 w-full py-3 bg-green-600 text-white rounded-xl font-bold">ذخیره در گالری 💾</button>
+            <button id="save-art" class="hidden mt-4 w-full py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-colors">ذخیره در گالری 💾</button>
         </div>
     </div>
 
     <script>
-        // THE STABLE GOOGLE BRIDGE
+        // ==================== CONFIG ====================
         const BACKEND_URL = "https://script.google.com/macros/s/AKfycbweI3dn0LS-3teYNqarSap8Vyko7W_S_4QyyCppyC_ptQUTsWTANVAjVpULBiVRcQpz/exec";
+        const MAX_RETRIES = 3;
+        const DEBOUNCE_DELAY = 500; // ms
+        let lastRequestTime = 0;
+        let requestInProgress = false;
 
+        // ==================== SPEECH API INIT ====================
         let isListening = false;
         const synth = window.speechSynthesis;
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = SpeechRecognition ? new SpeechRecognition() : null;
 
+        // Check for speech support and show warning if unavailable
+        if (!SpeechRecognition) {
+            document.getElementById('voice-warning').classList.remove('hidden');
+            document.getElementById('mic-btn').disabled = true;
+            document.getElementById('mic-btn').classList.add('disabled-btn');
+        }
+
         if (recognition) {
             recognition.lang = 'fa-IR';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.onstart = () => {
+                isListening = true;
+                startListeningUI();
+            };
+
             recognition.onresult = (event) => {
-                const text = event.results[0][0].transcript;
-                appendMessage('grandpa', text);
-                processAIResponse(text);
+                if (event.results.length > 0 && event.results[0].isFinal) {
+                    const text = event.results[0][0].transcript;
+                    if (text.trim()) {
+                        appendMessage('grandpa', text);
+                        processAIResponse(text);
+                    }
+                }
                 stopListeningUI();
             };
-            recognition.onerror = () => stopListeningUI();
-            recognition.onend = () => stopListeningUI();
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                appendMessage('sam', `ببخشید بابابزرگ، گوش دادنم اشتباه شد. دوباره سعی کن عزیزم. 💜`);
+                stopListeningUI();
+            };
+
+            recognition.onend = () => {
+                stopListeningUI();
+            };
         }
 
+        // ==================== TEXT-TO-SPEECH FALLBACK ====================
+        function speak(text) {
+            if (!synth) {
+                console.warn('Speech synthesis not supported');
+                return;
+            }
+
+            try {
+                synth.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fa-IR';
+                utterance.rate = 0.85;
+                utterance.pitch = 1.1;
+                
+                utterance.onstart = () => {
+                    document.getElementById('stop-voice').classList.remove('hidden');
+                };
+
+                utterance.onend = () => {
+                    document.getElementById('stop-voice').classList.add('hidden');
+                };
+
+                utterance.onerror = (event) => {
+                    console.error('Speech synthesis error:', event.error);
+                    document.getElementById('stop-voice').classList.add('hidden');
+                };
+
+                synth.speak(utterance);
+            } catch (error) {
+                console.error('Error in speak():', error);
+            }
+        }
+
+        function stopSpeaking() {
+            if (synth) {
+                synth.cancel();
+                document.getElementById('stop-voice').classList.add('hidden');
+            }
+        }
+
+        // ==================== WELCOME & PERSISTENCE ====================
         function closeWelcome() {
             document.getElementById('welcome-overlay').style.display = 'none';
-            try { localStorage.setItem('sam_visited', 'true'); } catch(e){}
+            try { 
+                localStorage.setItem('sam_visited', 'true'); 
+            } catch(e) {
+                console.warn('localStorage unavailable:', e);
+            }
         }
 
-        window.onload = () => {
-            try { if (localStorage.getItem('sam_visited')) closeWelcome(); } catch(e){}
-        };
+        window.addEventListener('load', () => {
+            try { 
+                if (localStorage.getItem('sam_visited')) closeWelcome(); 
+            } catch(e) {
+                console.warn('localStorage unavailable:', e);
+            }
 
+            // Register service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log('✓ Sam App Service Worker Registered', reg))
+                    .catch((err) => console.error('✗ Service Worker Registration Failed:', err));
+            }
+        });
+
+        // ==================== MESSAGING ====================
         function appendMessage(sender, text) {
             const msgDiv = document.getElementById('messages');
             const wrapper = document.createElement('div');
             wrapper.className = `flex ${sender === 'sam' ? 'justify-start' : 'justify-end'} mb-4 fade-in`;
+            
             const bubble = document.createElement('div');
-            bubble.className = `p-4 max-w-[80%] ${sender === 'sam' ? 'chat-bubble-sam' : 'chat-bubble-grandpa'} text-lg`;
-            bubble.innerText = text;
+            const bubbleClass = sender === 'sam' 
+                ? 'chat-bubble-sam' 
+                : sender === 'error'
+                ? 'chat-bubble-error'
+                : 'chat-bubble-grandpa';
+            
+            bubble.className = `p-4 max-w-[80%] ${bubbleClass} text-lg rounded-2xl`;
+            bubble.textContent = text;
+            
             wrapper.appendChild(bubble);
             msgDiv.appendChild(wrapper);
             msgDiv.scrollTop = msgDiv.scrollHeight;
         }
 
-        async function processAIResponse(prompt) {
+        // ==================== DEBOUNCE & RATE LIMITING ====================
+        function canProcessRequest() {
+            if (requestInProgress) return false;
+            const now = Date.now();
+            if (now - lastRequestTime < DEBOUNCE_DELAY) return false;
+            lastRequestTime = now;
+            return true;
+        }
+
+        // ==================== AI RESPONSE WITH RETRY ====================
+        async function processAIResponse(prompt, retryCount = 0) {
+            if (!canProcessRequest()) {
+                console.warn('Request throttled');
+                return;
+            }
+
+            requestInProgress = true;
             document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('send-btn').disabled = true;
+            document.getElementById('mic-btn').disabled = true;
+
             try {
-                // THE FIX: Follow redirect for Google Apps Script
                 const response = await fetch(`${BACKEND_URL}?prompt=${encodeURIComponent(prompt)}`, {
                     method: 'GET',
-                    redirect: 'follow'
+                    redirect: 'follow',
+                    timeout: 10000
                 });
                 
-                if (!response.ok) throw new Error("Network Error");
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
                 
                 const text = await response.text();
                 
-                if (text && !text.includes("خطا")) {
-                    appendMessage('sam', text.trim());
-                    speak(text.trim());
-                } else {
-                    throw new Error("Invalid Response");
+                if (!text || text.trim().length === 0) {
+                    throw new Error('Empty response from backend');
                 }
+
+                if (text.includes('خطا') || text.includes('error')) {
+                    throw new Error('Backend returned error message');
+                }
+
+                const trimmedText = text.trim();
+                appendMessage('sam', trimmedText);
+                speak(trimmedText);
+
             } catch (error) {
-                console.error(error);
-                appendMessage('sam', `ببخشید بابابزرگ جان، یه لحظه ارتباطم قطع شد. دوباره بگو عزیزم. 💜`);
+                console.error('AI Response Error:', error);
+
+                // Retry logic
+                if (retryCount < MAX_RETRIES) {
+                    console.log(`Retrying... (${retryCount + 1}/${MAX_RETRIES})`);
+                    await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
+                    requestInProgress = false;
+                    return processAIResponse(prompt, retryCount + 1);
+                }
+
+                // Final fallback message
+                const fallbackMsg = `ببخشید بابابزرگ جان، خطایی رخ داد و نتونستم جواب بدم. دوباره سعی کن لطفاً. اگه مشکل ادامه داشت، شاید ارتباط اینترنتت مشکل داره. 💜`;
+                appendMessage('error', fallbackMsg);
+                speak(fallbackMsg);
             } finally {
+                requestInProgress = false;
                 document.getElementById('loading').classList.add('hidden');
+                document.getElementById('send-btn').disabled = false;
+                document.getElementById('mic-btn').disabled = !recognition;
             }
         }
 
-        function speak(text) {
-            synth.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'fa-IR';
-            utterance.rate = 0.85;
-            utterance.pitch = 1.1;
-            utterance.onstart = () => document.getElementById('stop-voice').classList.remove('hidden');
-            utterance.onend = () => document.getElementById('stop-voice').classList.add('hidden');
-            synth.speak(utterance);
+        // ==================== VOICE & TEXT INPUT ====================
+        function toggleListening() {
+            if (!recognition) {
+                alert("مرورگر شما پشتیبانی نمی‌کند.");
+                return;
+            }
+            
+            if (isListening) {
+                recognition.stop();
+            } else {
+                try {
+                    recognition.start();
+                } catch (error) {
+                    console.error('Error starting recognition:', error);
+                    appendMessage('error', 'نتوانستم صوت شما را بگیرم. لطفا متن بنویسید. 💜');
+                }
+            }
         }
 
-        function stopSpeaking() { synth.cancel(); document.getElementById('stop-voice').classList.add('hidden'); }
-        function toggleListening() {
-            if (!recognition) return alert("مرورگر شما پشتیبانی نمی‌کند.");
-            if (isListening) recognition.stop(); else { recognition.start(); startListeningUI(); }
-        }
         function startListeningUI() {
-            isListening = true;
             document.getElementById('mic-btn').classList.replace('bg-purple-600', 'bg-red-500');
             document.getElementById('voice-status').classList.remove('hidden');
         }
+
         function stopListeningUI() {
             isListening = false;
             document.getElementById('mic-btn').classList.replace('bg-red-500', 'bg-purple-600');
             document.getElementById('voice-status').classList.add('hidden');
         }
+
         function handleTextInput() {
             const input = document.getElementById('text-input');
-            if (input.value.trim()) {
-                const text = input.value;
-                appendMessage('grandpa', text);
-                processAIResponse(text);
-                input.value = '';
-            }
-        }
-        function sendQuickMessage(text) { appendMessage('grandpa', text); processAIResponse(text); }
-        function toggleArtStudio() { document.getElementById('art-studio').classList.toggle('hidden'); }
-        function setPrompt(text) { document.getElementById('art-input').value = text; }
-        async function generateImage() {
-            const prompt = document.getElementById('art-input').value;
-            const resultDiv = document.getElementById('art-result');
-            if (!prompt) return;
-            resultDiv.innerHTML = "در حال کشیدن نقاشی... 🎨";
-            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&nologo=true`;
-            const img = new Image();
-            img.src = imageUrl;
-            img.onload = () => {
-                resultDiv.innerHTML = `<img src="${imageUrl}" class="w-full h-full object-cover" alt="AI Art">`;
-                document.getElementById('save-art').classList.remove('hidden');
-            };
+            const text = input.value.trim();
+            
+            if (text.length === 0) return;
+            if (!canProcessRequest()) return;
+
+            appendMessage('grandpa', text);
+            processAIResponse(text);
+            input.value = '';
         }
 
-        // REGISTER SERVICE WORKER FOR PWA
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then((reg) => console.log('Sam App Registered!', reg))
-                    .catch((err) => console.log('PWA Error:', err));
-            });
+        function sendQuickMessage(text) {
+            if (!canProcessRequest()) return;
+            appendMessage('grandpa', text);
+            processAIResponse(text);
+        }
+
+        // ==================== ART STUDIO ====================
+        function toggleArtStudio() {
+            document.getElementById('art-studio').classList.toggle('hidden');
+        }
+
+        function setPrompt(text) {
+            document.getElementById('art-input').value = text;
+        }
+
+        async function generateImage() {
+            const prompt = document.getElementById('art-input').value.trim();
+            if (!prompt) {
+                alert('لطفا یک توضیح برای نقاشی بنویس!');
+                return;
+            }
+
+            const resultDiv = document.getElementById('art-result');
+            const generateBtn = document.getElementById('art-generate-btn');
+            
+            resultDiv.innerHTML = '<div class="text-center"><div class="animate-spin text-4xl">🎨</div><p class="mt-2">در حال کشیدن نقاشی...</p></div>';
+            generateBtn.disabled = true;
+
+            try {
+                const encodedPrompt = encodeURIComponent(prompt);
+                const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&nologo=true`;
+                
+                const img = new Image();
+                
+                img.onload = () => {
+                    resultDiv.innerHTML = `<img src="${imageUrl}" class="w-full h-full object-cover" alt="AI Art: ${prompt}">`;
+                    document.getElementById('save-art').classList.remove('hidden');
+                    generateBtn.disabled = false;
+                };
+
+                img.onerror = () => {
+                    resultDiv.innerHTML = '<div class="flex flex-col items-center justify-center h-full"><div class="text-4xl mb-2">❌</div><p class="text-red-600 font-bold">نتوانستم نقاشی رو بکشم</p><p class="text-sm text-gray-500 mt-2">لطفا دوباره سعی کن یا دیگری تصویر انتخاب کن</p></div>';
+                    document.getElementById('save-art').classList.add('hidden');
+                    generateBtn.disabled = false;
+                };
+
+                img.src = imageUrl;
+
+            } catch (error) {
+                console.error('Image generation error:', error);
+                resultDiv.innerHTML = '<div class="flex flex-col items-center justify-center h-full"><div class="text-4xl mb-2">⚠️</div><p class="text-amber-600 font-bold">خطای شبکه</p></div>';
+                document.getElementById('save-art').classList.add('hidden');
+                generateBtn.disabled = false;
+            }
         }
     </script>
 </body>
