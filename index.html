@@ -251,7 +251,7 @@
           <button onclick="applyPresetPrompt('یک گربه پشمالو و سفید بسیار ملوس و بانمک')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">🐱 بچه گربه</button>
           <button onclick="applyPromptAndRun('کلبه دنج چوبی در جنگل سرسبز شمال ایران، آفتاب ملایم')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">🏡 کلبه دنج</button>
           <button onclick="applyPresetPrompt('دسته گل محمدی بسیار زیبا روی رومیزی ترمه ایرانی')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">💐 دسته گل محمدی</button>
-          <button onclick="applyPresetPrompt('حرم امام رضا در یک شب برفی رویایی')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">🕌 حرم بارانی</button>
+          <button onclick="applyPresetPrompt('حرم امام رضا در یک شب برفی رویایی')" class="text-xs bg-slate-100 text-slate-600 hover:bg-purple-50 hover:text-purple-700 px-3 py-1.5 rounded-full transition">🕌 حرم برفی</button>
         </div>
 
         <!-- Image Result Showcase Canvas -->
@@ -297,9 +297,6 @@
     // ============================================================
     // 🛡️ Safe Variable Initializations & API Configurations
     // ============================================================
-    const apiKey = ""; // Will use Canvas runtime authorization auto-injection
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'sam-grandpa-app';
-
     let voiceEnabled = true;
     let isBusy = false;
     let currentPaintingUrl = null;
@@ -489,42 +486,39 @@
     }
 
     // ============================================================
-    // 📡 Gemini API Integration & Exponential Backoff
+    // 📡 Keyless Pollinations Text AI API Integration
     // ============================================================
-    async function callGeminiAPI(historyPayload, retries = 5, delay = 1000) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+    async function callKeylessAPI(historyPayload, retries = 5, delay = 1000) {
+      const url = `https://text.pollinations.ai/`;
       
-      // Structure Gemini request body
-      const contents = historyPayload.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      }));
-
-      const body = {
-        contents: contents,
-        systemInstruction: { parts: [{ text: samSystemPrompt }] }
-      };
+      const messages = [
+        { role: 'system', content: samSystemPrompt },
+        ...historyPayload
+      ];
 
       try {
         const response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
+          body: JSON.stringify({
+            messages: messages,
+            model: "openai",
+            stream: false
+          })
         });
 
         if (!response.ok) {
           throw new Error(`API Error: ${response.status}`);
         }
 
-        const data = await response.json();
-        const outputText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!outputText) throw new Error("Empty Response from Gemini");
+        const outputText = await response.text();
+        if (!outputText) throw new Error("Empty Response");
         return outputText;
 
       } catch (err) {
         if (retries > 0) {
           await new Promise(resolve => setTimeout(resolve, delay));
-          return callGeminiAPI(historyPayload, retries - 1, delay * 2); // Exponential Backoff
+          return callKeylessAPI(historyPayload, retries - 1, delay * 2);
         } else {
           throw err;
         }
@@ -558,7 +552,7 @@
       appendTypingIndicator();
 
       try {
-        const responseText = await callGeminiAPI(chatHistory);
+        const responseText = await callKeylessAPI(chatHistory);
         
         removeTypingIndicator();
         appendMessageBubble('assistant', responseText);
@@ -730,7 +724,7 @@
     }
 
     // ============================================================
-    // 🎨 Creative Imagen-4 Studio Operations
+    // 🎨 Creative Keyless Pollinations Painting Studio
     // ============================================================
     function openImageModal() {
       document.getElementById('imageModal').classList.remove('hidden');
@@ -778,35 +772,25 @@
       `;
 
       try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
-        
-        // Structure standard Google Vertex/Imagen-4 generation payload
-        const payload = {
-          instances: [{ prompt: promptInput }],
-          parameters: { sampleCount: 1 }
+        const seed = Math.floor(Math.random() * 1000000);
+        const optimizedPrompt = encodeURIComponent(promptInput + ", beautiful, highly detailed, soft warm illustration style");
+        const url = `https://image.pollinations.ai/prompt/${optimizedPrompt}?width=512&height=512&model=flux&seed=${seed}&nologo=true`;
+
+        // Preload image
+        const img = new Image();
+        img.src = url;
+        img.onload = () => {
+          currentPaintingUrl = url;
+          showcase.innerHTML = `
+            <img src="${url}" class="w-full h-full object-cover rounded-xl shadow-md border animate-float" alt="نقاشی سام">
+          `;
+          downloadBtn.classList.remove('hidden');
+          actionBtn.disabled = false;
+          actionBtn.textContent = 'بکش ✍️';
         };
-
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) throw new Error(`Imagen API Error: ${response.status}`);
-
-        const result = await response.json();
-        const base64Bytes = result.predictions?.[0]?.bytesBase64Encoded;
-
-        if (!base64Bytes) {
-          throw new Error("No Base64 bytes returned from Imagen-4");
-        }
-
-        currentPaintingUrl = `data:image/png;base64,${base64Bytes}`;
-
-        showcase.innerHTML = `
-          <img src="${currentPaintingUrl}" class="w-full h-full object-cover rounded-xl shadow-md border" alt="نقاشی سام">
-        `;
-        downloadBtn.classList.remove('hidden');
+        img.onerror = () => {
+          throw new Error("Failed to load image");
+        };
 
       } catch (err) {
         console.error(err);
@@ -815,7 +799,6 @@
           <p class="text-sm font-bold text-red-500">وای! مداد رنگی‌هام شکست!</p>
           <p class="text-xs text-slate-400 mt-1">نتونستم نقاشی رو بکشم، دوباره تلاش کنیم؟</p>
         `;
-      } finally {
         actionBtn.disabled = false;
         actionBtn.textContent = 'بکش ✍️';
       }
@@ -837,3 +820,4 @@
 </html>
 
 ```
+
